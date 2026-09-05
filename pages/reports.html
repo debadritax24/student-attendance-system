@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports | Attendify</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <div class="app">
@@ -15,7 +15,7 @@
             </div>
             <a href="dashboard.html" class="nav-item">📊 Dashboard</a>
             <a href="attendance.html" class="nav-item">✓ Attendance</a>
-            <a href="student.html" class="nav-item">👥 Students</a>
+            <a href="students.html" class="nav-item">👥 Students</a>
             <a href="subjects.html" class="nav-item">📚 Subjects</a>
             <a href="reports.html" class="nav-item active">📈 Reports</a>
             <a href="history.html" class="nav-item">🕒 History</a>
@@ -69,8 +69,8 @@
         </main>
     </div>
 
-    <script src="data.js"></script>
-    <script src="common.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/common.js"></script>
     <script>
         const total = students.length;
         const average = total ? Math.round(students.reduce((sum, student) => sum + student.attendance, 0) / total) : 0;

@@ -44,7 +44,7 @@ if (loginForm) {
             }
 
             const user = payload.data;
-            const redirectPage = user.role === "STUDENT" ? "student.html" : "dashboard.html";
+            const redirectPage = user.role === "STUDENT" ? "students.html" : "dashboard.html";
             setLoggedInUser(user, redirectPage);
         } catch (error) {
             alert(error.message || "Login failed. Check your credentials and try again.");

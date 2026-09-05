@@ -1,0 +1,13 @@
+{
+  "name": "attendify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Attendify - Smart Attendance Management System",
+  "scripts": {
+    "dev": "cd server && npm run dev",
+    "build": "cd server && npm run build",
+    "start": "cd server && npm start",
+    "lint": "cd server && npm run lint",
+    "install:all": "cd server && npm install"
+  }
+}

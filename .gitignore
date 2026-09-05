@@ -3,3 +3,5 @@
 !.env.example
 .next
 node_modules
+server/.next
+server/node_modules
