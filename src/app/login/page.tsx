@@ -35,7 +35,8 @@ export default function LoginPage() {
       const user = payload.data;
       localStorage.setItem("attendifyUser", JSON.stringify(user));
       setUser(user);
-      router.replace(user.role === "STUDENT" ? "/students" : "/dashboard");
+      const route = user.role === "ADMIN" ? "/admin" : user.role === "CR" ? "/cr" : "/dashboard";
+      router.replace(route);
     } catch (err: any) {
       setError(err.message || "Login failed. Check your credentials and try again.");
     } finally {
