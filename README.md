@@ -1,16 +1,26 @@
 # Attendify - Student Attendance Management System
 
-A full-stack web application for managing student attendance, built with Next.js 15 (App Router) handling both the frontend pages and backend API in a single project.
+A full-stack web application for managing student attendance. Built with Next.js 15 (App Router) — frontend pages and backend API run together on a single port with one command.
+
+## Quick Start
+
+```bash
+npm install
+cp .env.example .env.local    # edit with your MongoDB URI and JWT secret
+npm run dev                    # http://localhost:3001
+```
 
 ## Tech Stack
 
-- [Next.js 15](https://nextjs.org/) - App Router, API Routes, React Server Components
-- [React 19](https://react.dev/) - UI framework
-- [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) - Database
-- [Zod](https://zod.dev/) - Request validation
-- [jose](https://github.com/panva/jose) - JWT authentication
-- [bcryptjs](https://github.com/nicolo-ribaudo/bcryptjs) - Password hashing
+| Layer | Technology |
+|---|---|
+| Framework | [Next.js 15](https://nextjs.org/) (App Router) |
+| UI | [React 19](https://react.dev/) |
+| Language | [TypeScript](https://www.typescriptlang.org/) |
+| Database | [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) |
+| Validation | [Zod](https://zod.dev/) |
+| Auth | [jose](https://github.com/panva/jose) (JWT) + HTTP-only cookies |
+| Passwords | [bcryptjs](https://github.com/nicolo-ribaudo/bcryptjs) |
 
 ## Project Structure
 
