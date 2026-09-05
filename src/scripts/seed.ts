@@ -1,7 +1,9 @@
+import "dotenv/config";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/attendify";
+const rawUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/attendify";
+const MONGODB_URI = rawUri.includes("/attendify") ? rawUri : rawUri.replace(/\/\?/, "/attendify?");
 
 const userSchema = new mongoose.Schema({
   name: String, email: String, passwordHash: String,
@@ -130,6 +132,8 @@ async function seed() {
   // Create timetable
   const timetableEntries = timetable.map(entry => ({
     ...entry,
+    startTime: periods[entry.period - 1].startTime,
+    endTime: periods[entry.period - 1].endTime,
     section: "CSE-III-E",
     semester: 5,
   }));

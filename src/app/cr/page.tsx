@@ -51,6 +51,7 @@ export default function CRPage() {
   const currentHour = now.getHours();
   const currentMin = now.getMinutes();
   const currentPeriod = todaySchedule.find(t => {
+    if (!t.startTime || !t.endTime) return false;
     const [sh, sm] = t.startTime.split(":").map(Number);
     const [eh, em] = t.endTime.split(":").map(Number);
     return (currentHour > sh || (currentHour === sh && currentMin >= sm)) &&
