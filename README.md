@@ -1,71 +1,76 @@
 # Attendify - Student Attendance Management System
 
-A full-stack web application for managing student attendance, built with a Next.js 15 API backend and a vanilla HTML/CSS/JS frontend.
+A full-stack web application for managing student attendance, built with Next.js 15 (App Router) handling both the frontend pages and backend API in a single project.
 
 ## Tech Stack
 
-**Frontend**
-
-- HTML5, CSS3, Vanilla JavaScript
-- Chart.js (CDN) for dashboard charts
-- No build step required
-
-**Backend**
-
-- [Next.js 15](https://nextjs.org/) (App Router, API Routes)
-- [TypeScript](https://www.typescriptlang.org/)
-- [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) ODM
-- [Zod](https://zod.dev/) for request validation
-- [jose](https://github.com/panva/jose) for JWT authentication
-- [bcryptjs](https://github.com/nicolo-ribaudo/bcryptjs) for password hashing
+- [Next.js 15](https://nextjs.org/) - App Router, API Routes, React Server Components
+- [React 19](https://react.dev/) - UI framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) - Database
+- [Zod](https://zod.dev/) - Request validation
+- [jose](https://github.com/panva/jose) - JWT authentication
+- [bcryptjs](https://github.com/nicolo-ribaudo/bcryptjs) - Password hashing
 
 ## Project Structure
 
 ```
-├── index.html                  # Entry point (redirects to login)
-├── package.json                # Root convenience scripts
-├── css/
-│   └── style.css               # Single consolidated stylesheet
-├── js/
-│   ├── common.js               # Shared utilities (auth, sidebar, toast, modal)
-│   ├── data.js                 # Sample student/subject/attendance data
-│   ├── login.js                # Login form logic
-│   ├── students.js             # Student list CRUD + filtering
-│   ├── student-details.js      # Individual student view + chart
-│   ├── attendance.js           # Attendance marking interface
-│   ├── subjects.js             # Subject management
-│   ├── history.js              # Attendance history view
-│   └── reports.js              # Reports logic
-├── pages/
-│   ├── login.html              # Login page
-│   ├── dashboard.html          # Admin/CR dashboard with charts
-│   ├── students.html           # Student list with add/edit/delete
-│   ├── student-details.html    # Single student detail + attendance chart
-│   ├── attendance.html         # Mark daily attendance
-│   ├── subjects.html           # Manage subjects
-│   ├── reports.html            # Attendance summary reports
-│   ├── history.html            # Attendance history log
-│   ├── profile.html            # User profile
-│   └── settings.html           # App settings
-└── server/                     # Next.js API backend
-    ├── package.json
-    ├── tsconfig.json
-    ├── .env.example            # Environment variable template
-    └── src/
-        ├── validation.ts       # Zod validation schemas
-        ├── lib/
-        │   ├── db.ts           # MongoDB connection singleton
-        │   ├── auth.ts         # JWT cookie auth + role checking
-        │   ├── http.ts         # CORS + consistent API responses
-        │   └── query.ts        # Pagination helper
-        ├── models/
-        │   ├── User.ts         # User model (ADMIN, CR, STUDENT)
-        │   ├── Student.ts      # Student model
-        │   ├── Subject.ts      # Subject model
-        │   └── Attendance.ts   # Attendance model (unique: student+subject+date)
-        └── app/
-            ├── actions.ts      # Server action (getCurrentUser)
-            └── api/            # 17 API route handlers
+├── package.json
+├── tsconfig.json
+├── next.config.mjs
+├── .env.local                    # Environment variables (not committed)
+├── .env.example                  # Environment variable template
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx            # Root layout with AuthProvider
+│   │   ├── page.tsx              # Home → redirects to /login or /dashboard
+│   │   ├── globals.css           # All styles
+│   │   ├── login/page.tsx        # Login page
+│   │   ├── dashboard/page.tsx    # Dashboard with stats
+│   │   ├── students/
+│   │   │   ├── page.tsx          # Student list (CRUD)
+│   │   │   └── [id]/page.tsx     # Student detail view
+│   │   ├── attendance/page.tsx   # Mark attendance
+│   │   ├── subjects/page.tsx     # Subject management
+│   │   ├── reports/page.tsx      # Attendance reports
+│   │   ├── history/page.tsx      # Attendance history
+│   │   ├── profile/page.tsx      # User profile
+│   │   ├── settings/page.tsx     # App settings
+│   │   └── api/                  # Backend API routes
+│   │       ├── auth/login/route.ts
+│   │       ├── auth/logout/route.ts
+│   │       ├── users/route.ts
+│   │       ├── users/[id]/route.ts
+│   │       ├── students/route.ts
+│   │       ├── students/[id]/route.ts
+│   │       ├── subjects/route.ts
+│   │       ├── subjects/[id]/route.ts
+│   │       ├── attendance/route.ts
+│   │       ├── attendance/[id]/route.ts
+│   │       ├── attendance/bulk/route.ts
+│   │       ├── attendance/history/[studentId]/route.ts
+│   │       ├── reports/daily/route.ts
+│   │       ├── reports/monthly/route.ts
+│   │       ├── stats/dashboard/route.ts
+│   │       ├── stats/subjects/route.ts
+│   │       └── health/route.ts
+│   ├── components/
+│   │   ├── AppShell.tsx          # App layout wrapper (sidebar + main)
+│   │   ├── Sidebar.tsx           # Navigation sidebar
+│   │   └── Navbar.tsx            # Top navbar with user info
+│   ├── context/
+│   │   └── AuthContext.tsx       # Client-side auth state (localStorage)
+│   ├── lib/
+│   │   ├── db.ts                 # MongoDB connection singleton
+│   │   ├── auth.ts               # JWT cookie auth + role checking
+│   │   ├── http.ts               # CORS + consistent API responses
+│   │   └── query.ts              # Pagination helper
+│   ├── models/
+│   │   ├── User.ts
+│   │   ├── Student.ts
+│   │   ├── Subject.ts
+│   │   └── Attendance.ts
+│   └── validation.ts             # Zod schemas
 ```
 
 ## Prerequisites
@@ -75,57 +80,37 @@ A full-stack web application for managing student attendance, built with a Next.
 
 ## Setup
 
-### 1. Install root dependencies (optional, for convenience scripts)
-
 ```bash
+# Install dependencies
 npm install
-```
 
-### 2. Set up the backend
-
-```bash
-cd server
-npm install
+# Set up environment variables
 cp .env.example .env.local
 ```
 
-Edit `server/.env.local` and set:
+Edit `.env.local`:
 
 ```env
 MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/attendify
 JWT_SECRET=your-strong-random-secret-here
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:3001
 ```
 
-### 3. Start the backend
+## Running
 
 ```bash
-# From server/
-npm run dev      # Development (http://localhost:3001)
+# Development (starts on port 3001)
+npm run dev
 
-# From root
-npm run dev      # Same thing
+# Production build
+npm run build
+npm start
+
+# Lint
+npm run lint
 ```
 
-### 4. Open the frontend
-
-Open `index.html` in a browser, or serve the project root:
-
-```bash
-npx serve .
-```
-
-The frontend communicates with the backend at `http://localhost:3001`.
-
-## Available Scripts
-
-| Command | Description |
-|---|---|
-| `npm run dev` | Start backend dev server on port 3001 |
-| `npm run build` | Production build of the Next.js backend |
-| `npm start` | Start production server on port 3001 |
-| `npm run lint` | Run ESLint on backend code |
-| `npm run install:all` | Install backend dependencies |
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 ## API Endpoints
 
@@ -201,16 +186,6 @@ The frontend communicates with the backend at `http://localhost:3001`.
 All API responses follow a consistent shape:
 
 ```json
-// Success
 { "success": true, "data": { ... } }
-
-// Error
 { "success": false, "error": "Error message" }
 ```
-
-## Notes
-
-- The MongoDB compound unique index on `(student, subject, date)` prevents duplicate attendance records
-- JWT tokens are stored in HTTP-only cookies for security
-- Attendance percentage counts both PRESENT and LATE statuses as attended
-- The frontend uses `localStorage` to persist login state between page reloads
