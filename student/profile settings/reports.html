@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | Attendify</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">A</div>
+                <h2>Attendify</h2>
+            </div>
+            <a href="dashboard.html" class="nav-item">📊 Dashboard</a>
+            <a href="attendance.html" class="nav-item">✓ Attendance</a>
+            <a href="student.html" class="nav-item">👥 Students</a>
+            <a href="subjects.html" class="nav-item">📚 Subjects</a>
+            <a href="reports.html" class="nav-item active">📈 Reports</a>
+            <a href="history.html" class="nav-item">🕒 History</a>
+            <a href="profile.html" class="nav-item">👤 Profile</a>
+            <a href="settings.html" class="nav-item">⚙ Settings</a>
+            <a href="#" onclick="logout()" class="nav-item">⇥ Logout</a>
+        </aside>
+
+        <main class="main">
+            <header class="navbar">
+                <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+                <div class="page-title">Reports</div>
+                <div class="nav-right">
+                    <div class="notification">🔔</div>
+                    <div class="user">
+                        <div class="avatar">DG</div>
+                        <div class="user-info">
+                            <strong data-user-name>Debadrita Goswami</strong>
+                            <small data-user-role>CR</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="content">
+                <div class="page-header">
+                    <div>
+                        <h1>Attendance Reports</h1>
+                        <p>Review attendance performance across the class.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.print()">Print Report</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-header">Total Students</div><div class="stat-value" id="reportTotal">0</div></div>
+                    <div class="stat-card"><div class="stat-header">Average Attendance</div><div class="stat-value" id="reportAverage">0%</div></div>
+                    <div class="stat-card"><div class="stat-header">Meeting Requirement</div><div class="stat-value" id="reportAbove">0</div></div>
+                    <div class="stat-card"><div class="stat-header">Needs Attention</div><div class="stat-value" id="reportBelow">0</div></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Student Attendance Summary</div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Roll</th><th>Student</th><th>Department</th><th>Attendance</th><th>Status</th></tr></thead>
+                            <tbody id="reportTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="common.js"></script>
+    <script>
+        const total = students.length;
+        const average = total ? Math.round(students.reduce((sum, student) => sum + student.attendance, 0) / total) : 0;
+        const above = students.filter(student => student.attendance >= 75).length;
+
+        document.getElementById("reportTotal").textContent = total;
+        document.getElementById("reportAverage").textContent = `${average}%`;
+        document.getElementById("reportAbove").textContent = above;
+        document.getElementById("reportBelow").textContent = total - above;
+        document.getElementById("reportTable").innerHTML = students.map(student => {
+            const status = student.attendance >= 75 ? "Good" : "Warning";
+            const badge = student.attendance >= 75 ? "badge-present" : "badge-warning";
+            return `<tr><td><strong>${student.roll}</strong></td><td>${student.name}</td><td>${student.department}</td><td>${student.attendance}%</td><td><span class="badge ${badge}">${status}</span></td></tr>`;
+        }).join("");
+
+        setUserInfo();
+    </script>
+</body>
+</html>

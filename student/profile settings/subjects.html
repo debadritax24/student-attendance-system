@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Subjects | Attendify</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+        <div class="brand-icon">A</div>
+        <h2>Attendify</h2>
+    </div>
+
+    <a href="dashboard.html" class="nav-item">
+        📊 Dashboard
+    </a>
+
+    <a href="attendance.html" class="nav-item">
+        ✓ Attendance
+    </a>
+
+    <a href="student.html" class="nav-item">
+        👥 Students
+    </a>
+
+    <a href="subjects.html" class="nav-item active">
+        📚 Subjects
+    </a>
+
+    <a href="reports.html" class="nav-item">
+        📈 Reports
+    </a>
+
+    <a href="history.html" class="nav-item">
+        🕒 History
+    </a>
+
+    <a href="profile.html" class="nav-item">
+        👤 Profile
+    </a>
+
+    <a href="settings.html" class="nav-item">
+        ⚙ Settings
+    </a>
+
+    <a href="#" onclick="logout()" class="nav-item">
+        ⇥ Logout
+    </a>
+
+</aside>
+
+
+<main class="main">
+
+<header class="navbar">
+
+    <button
+        class="mobile-menu"
+        onclick="toggleSidebar()">
+
+        ☰
+
+    </button>
+
+    <div class="page-title">
+        Subjects
+    </div>
+
+    <div class="nav-right">
+
+        <div class="notification">
+            🔔
+        </div>
+
+        <div class="user">
+
+            <div class="avatar">
+                DG
+            </div>
+
+            <div class="user-info">
+
+                <strong data-user-name>
+                    Debadrita Goswami
+                </strong>
+
+                <small data-user-role>
+                    CR
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<section class="content">
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Subjects</h1>
+
+        <p>
+            Manage subjects and class information.
+        </p>
+
+    </div>
+
+    <button
+        class="btn btn-primary"
+        onclick="openModal('subjectModal')">
+
+        + Add Subject
+
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <div class="filters">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="subjectSearch"
+                placeholder="Search subjects..."
+            >
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    id="subjectGrid"
+    class="grid-2">
+
+</div>
+
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- MODAL -->
+
+<div
+    class="modal-overlay"
+    id="subjectModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>Add Subject</h2>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('subjectModal')">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="subjectForm">
+
+            <div class="form-group">
+
+                <label>Subject Name</label>
+
+                <input
+                    id="subjectName"
+                    class="form-control"
+                    placeholder="Subject name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Subject Code</label>
+
+                <input
+                    id="subjectCode"
+                    class="form-control"
+                    placeholder="CS505"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Faculty</label>
+
+                <input
+                    id="subjectFaculty"
+                    class="form-control"
+                    placeholder="Faculty name"
+                    required>
+
+            </div>
+
+
+            <button
+                class="btn btn-primary btn-full"
+                type="submit">
+
+                Add Subject
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<div class="toast"></div>
+
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="subjects.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Settings | Attendify</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+
+        <div class="brand-icon">A</div>
+
+        <h2>Attendify</h2>
+
+    </div>
+
+    <a href="dashboard.html" class="nav-item">
+        📊 Dashboard
+    </a>
+
+    <a href="attendance.html" class="nav-item">
+        ✓ Attendance
+    </a>
+
+    <a href="student.html" class="nav-item">
+        👥 Students
+    </a>
+
+    <a href="subjects.html" class="nav-item">
+        📚 Subjects
+    </a>
+
+    <a href="reports.html" class="nav-item">
+        📈 Reports
+    </a>
+
+    <a href="history.html" class="nav-item">
+        🕒 History
+    </a>
+
+    <a href="profile.html" class="nav-item">
+        👤 Profile
+    </a>
+
+    <a href="settings.html" class="nav-item active">
+        ⚙ Settings
+    </a>
+
+    <a href="#" onclick="logout()" class="nav-item">
+        ⇥ Logout
+    </a>
+
+</aside>
+
+
+<main class="main">
+
+<header class="navbar">
+
+    <button
+        class="mobile-menu"
+        onclick="toggleSidebar()">
+
+        ☰
+
+    </button>
+
+    <div class="page-title">
+        Settings
+    </div>
+
+    <div class="nav-right">
+
+        <div class="notification">
+            🔔
+        </div>
+
+        <div class="user">
+
+            <div class="avatar">
+                DG
+            </div>
+
+            <div class="user-info">
+
+                <strong data-user-name>
+                    Debadrita Goswami
+                </strong>
+
+                <small data-user-role>
+                    CR
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<section class="content">
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Settings</h1>
+
+        <p>
+            Customize your Attendify experience.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- APPEARANCE -->
+
+<div class="card">
+
+    <div class="card-title">
+        Appearance
+    </div>
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:20px;
+    ">
+
+        <div>
+
+            <strong>Dark Mode</strong>
+
+            <p style="color:#64748b">
+                Use a darker interface.
+            </p>
+
+        </div>
+
+        <label>
+            <input
+                type="checkbox"
+                id="darkMode">
+            Enable
+        </label>
+
+    </div>
+
+</div>
+
+
+<!-- NOTIFICATIONS -->
+
+<div class="card">
+
+    <div class="card-title">
+        Notifications
+    </div>
+
+
+    <div style="
+        display:flex;
+        flex-direction:column;
+        gap:18px;
+    ">
+
+
+        <label style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+
+            <span>
+
+                <strong>Attendance Alerts</strong>
+
+                <small style="
+                    display:block;
+                    color:#64748b;
+                ">
+
+                    Get notified about low attendance.
+
+                </small>
+
+            </span>
+
+            <input
+                type="checkbox"
+                checked>
+
+        </label>
+
+
+        <label style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+
+            <span>
+
+                <strong>Class Reminders</strong>
+
+                <small style="
+                    display:block;
+                    color:#64748b;
+                ">
+
+                    Receive reminders for upcoming classes.
+
+                </small>
+
+            </span>
+
+            <input
+                type="checkbox"
+                checked>
+
+        </label>
+
+
+        <label style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+
+            <span>
+
+                <strong>System Notifications</strong>
+
+                <small style="
+                    display:block;
+                    color:#64748b;
+                ">
+
+                    Receive important system updates.
+
+                </small>
+
+            </span>
+
+            <input
+                type="checkbox"
+                checked>
+
+        </label>
+
+    </div>
+
+</div>
+
+
+<!-- ACCOUNT -->
+
+<div class="card">
+
+    <div class="card-title">
+        Account
+    </div>
+
+    <button
+        class="btn btn-secondary"
+        onclick="showToast('Password change will be available after backend integration')">
+
+        Change Password
+
+    </button>
+
+    <button
+        class="btn btn-danger"
+        style="margin-left:8px"
+        onclick="logout()">
+
+        Logout
+
+    </button>
+
+</div>
+
+
+<div style="text-align:right">
+
+    <button
+        class="btn btn-primary"
+        onclick="showToast('Settings saved successfully')">
+
+        Save Settings
+
+    </button>
+
+</div>
+
+
+</section>
+
+</main>
+
+</div>
+
+
+<div class="toast"></div>
+
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+
+<script>
+
+setUserInfo();
+
+
+document
+    .getElementById("darkMode")
+    .addEventListener(
+        "change",
+        function() {
+
+            if (this.checked) {
+
+                document.body.style.background =
+                    "#0f172a";
+
+                showToast(
+                    "Dark mode preview enabled"
+                );
+
+            } else {
+
+                document.body.style.background =
+                    "#f8fafc";
+
+                showToast(
+                    "Light mode enabled"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+
+</html>

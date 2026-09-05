@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance History | Attendify</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+        <div class="brand-icon">A</div>
+        <h2>Attendify</h2>
+    </div>
+
+    <a href="dashboard.html" class="nav-item">📊 Dashboard</a>
+    <a href="attendance.html" class="nav-item">✓ Attendance</a>
+    <a href="student.html" class="nav-item">👥 Students</a>
+    <a href="subjects.html" class="nav-item">📚 Subjects</a>
+    <a href="reports.html" class="nav-item">📈 Reports</a>
+    <a href="history.html" class="nav-item active">🕒 History</a>
+    <a href="profile.html" class="nav-item">👤 Profile</a>
+    <a href="settings.html" class="nav-item">⚙ Settings</a>
+
+    <a href="#" onclick="logout()" class="nav-item">
+        ⇥ Logout
+    </a>
+
+</aside>
+
+<main class="main">
+
+<header class="navbar">
+
+    <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+    <div class="page-title">
+        Attendance History
+    </div>
+
+    <div class="nav-right">
+
+        <div class="notification">
+            🔔
+        </div>
+
+        <div class="user">
+
+            <div class="avatar">DG</div>
+
+            <div class="user-info">
+                <strong data-user-name>Debadrita Goswami</strong>
+                <small data-user-role>CR</small>
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+<section class="content">
+
+<div class="page-header">
+
+    <div>
+        <h1>Attendance History</h1>
+        <p>View previously recorded attendance.</p>
+    </div>
+
+</div>
+
+<div class="card">
+
+    <div class="filters">
+
+        <input
+            type="date"
+            id="historyDate"
+            class="form-control">
+
+        <select
+            id="historySubject"
+            class="form-control">
+
+            <option value="">All Subjects</option>
+            <option>Data Structures</option>
+            <option>Database Management</option>
+            <option>Operating Systems</option>
+            <option>Computer Networks</option>
+
+        </select>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="historySearch"
+                placeholder="Search...">
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card">
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+    <th>Date</th>
+    <th>Subject</th>
+    <th>Period</th>
+    <th>Present</th>
+    <th>Absent</th>
+    <th>Percentage</th>
+    <th>Marked By</th>
+    <th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="historyTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<div class="toast"></div>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="history.js"></script>
+
+</body>
+</html>

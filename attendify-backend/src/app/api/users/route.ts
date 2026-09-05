@@ -1,0 +1,7 @@
+import { NextRequest } from "next/server";
+import bcrypt from "bcryptjs";
+import { connectDB } from "@/lib/db"; import User from "@/models/User";
+import { getSession, requireRole } from "@/lib/auth"; import { userCreate } from "@/validation"; import { ok,error,handleError } from "@/lib/http"; import { pagination } from "@/lib/query";
+export const runtime="nodejs";
+export async function GET(req:NextRequest){try{const s=await getSession(req),denied=requireRole(s,["ADMIN"]);if(denied)return denied;await connectDB();const {page,limit,skip}=pagination(req.nextUrl.searchParams);const q=req.nextUrl.searchParams.get("search");const filter=q?{$or:[{name:new RegExp(q,"i")},{email:new RegExp(q,"i")}]}:{};const [items,total]=await Promise.all([User.find(filter).select("-passwordHash").skip(skip).limit(limit).sort({createdAt:-1}),User.countDocuments(filter)]);return ok({items,page,limit,total});}catch(e){return handleError(e)}}
+export async function POST(req:NextRequest){try{const s=await getSession(req),denied=requireRole(s,["ADMIN"]);if(denied)return denied;const b=userCreate.parse(await req.json());await connectDB();const u=await User.create({...b,passwordHash:await bcrypt.hash(b.password,12)});return ok({id:u._id,name:u.name,email:u.email,role:u.role,studentId:u.studentId},201);}catch(e){return handleError(e)}}
