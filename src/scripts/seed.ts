@@ -38,43 +38,70 @@ const periods = [
   { period: 8, startTime: "16:30", endTime: "17:25" },
 ];
 
-const timetable = [
+const cseTimetable = [
   // Monday
   { day: "Monday", period: 1, subject: "Database Management Systems", subjectCode: "CSE1108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
-  { day: "Monday", period: 2, subject: "Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
+  { day: "Monday", period: 2, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
   { day: "Monday", period: 3, subject: "Interdisciplinary Project", subjectCode: "IDP14001", faculty: "", location: "", type: "activity" },
   { day: "Monday", period: 4, subject: "Library", subjectCode: "", faculty: "", location: "Library", type: "library" },
-  { day: "Monday", period: 6, subject: "Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
+  { day: "Monday", period: 6, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
   { day: "Monday", period: 7, subject: "Engineering Mathematics - III C", subjectCode: "SDS11510", faculty: "", location: "", type: "lecture" },
 
   // Tuesday
-  { day: "Tuesday", period: 1, subject: "Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
-  { day: "Tuesday", period: 2, subject: "Soft Skill (Non-NEP)", subjectCode: "CLL1 G3_3", faculty: "", location: "", type: "activity" },
+  { day: "Tuesday", period: 1, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
+  { day: "Tuesday", period: 2, subject: "CLL1 G3_3 (Soft Skill-Non-NEP)", subjectCode: "CLL1 G3_3", faculty: "", location: "", type: "activity" },
   { day: "Tuesday", period: 3, subject: "Database Management Systems", subjectCode: "CSE1108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
   { day: "Tuesday", period: 4, subject: "Community Service", subjectCode: "SOC14100", faculty: "", location: "", type: "activity" },
-  { day: "Tuesday", period: 6, subject: "Principles of Programming Language Lab", subjectCode: "CSE12106", faculty: "Dr. Arnab Sinha / Mr. Sujoy Chatterjee", location: "AU6-LAB-2102", type: "lab" },
-  { day: "Tuesday", period: 8, subject: "Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "AU6-LAB-2102", type: "lab" },
+  { day: "Tuesday", period: 6, subject: "Professional Core Lab – I Principles of Programming Language Lab", subjectCode: "CSE12106", faculty: "Dr. Arnab Sinha / Mr. Sujoy Chatterjee", location: "AU6-LAB-2102", type: "lab" },
+  { day: "Tuesday", period: 8, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "AU6-LAB-2102", type: "lab" },
 
   // Wednesday
-  { day: "Wednesday", period: 1, subject: "Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
+  { day: "Wednesday", period: 1, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
   { day: "Wednesday", period: 2, subject: "Interdisciplinary Project", subjectCode: "IDP14001", faculty: "", location: "", type: "activity" },
-  { day: "Wednesday", period: 3, subject: "Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
+  { day: "Wednesday", period: 3, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
   { day: "Wednesday", period: 4, subject: "Engineering Mathematics - III C", subjectCode: "SDS11510", faculty: "", location: "", type: "lecture" },
   { day: "Wednesday", period: 6, subject: "Library", subjectCode: "", faculty: "", location: "Library", type: "library" },
-  { day: "Wednesday", period: 7, subject: "Data Structures and Algorithms Lab", subjectCode: "CSE12107", faculty: "Mr. Subhra Prokash Dutta / Mr. Sujoy Chatterjee", location: "AU6-LAB-2102", type: "lab" },
+  { day: "Wednesday", period: 7, subject: "Professional Core Lab - II Data Structures and Algorithms Lab", subjectCode: "CSE12107", faculty: "Mr. Subhra Prokash Dutta / Mr. Sujoy Chatterjee", location: "AU6-LAB-2102", type: "lab" },
 
   // Thursday
   { day: "Thursday", period: 1, subject: "Database Management Systems Lab", subjectCode: "CSE12113", faculty: "Mr. Victor Das / Ayan Mishra", location: "AU6-LAB-4001B", type: "lab" },
-  { day: "Thursday", period: 2, subject: "Aptitude (Non-NEP)", subjectCode: "CLL2 G3_3", faculty: "", location: "", type: "activity" },
-  { day: "Thursday", period: 3, subject: "Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
+  { day: "Thursday", period: 2, subject: "CLL2 G3_3 (Aptitude-Non-NEP)", subjectCode: "CLL2 G3_3", faculty: "", location: "", type: "activity" },
+  { day: "Thursday", period: 3, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
   { day: "Thursday", period: 6, subject: "Engineering Mathematics - III C", subjectCode: "SDS11510", faculty: "", location: "", type: "lecture" },
 
   // Friday
   { day: "Friday", period: 1, subject: "Engineering Mathematics - III C", subjectCode: "SDS11510", faculty: "", location: "", type: "lecture" },
-  { day: "Friday", period: 2, subject: "Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
+  { day: "Friday", period: 2, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
   { day: "Friday", period: 3, subject: "Interdisciplinary Project", subjectCode: "IDP14001", faculty: "", location: "", type: "activity" },
   { day: "Friday", period: 4, subject: "Database Management Systems", subjectCode: "CSE1108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
-  { day: "Friday", period: 6, subject: "Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
+  { day: "Friday", period: 6, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
+];
+
+const sections = [
+  { key: "CSE-III-A", department: "CSE", semester: 3, section: "A" },
+  { key: "CSE-III-B", department: "CSE", semester: 3, section: "B" },
+  { key: "CSE-III-C", department: "CSE", semester: 3, section: "C" },
+  { key: "CSE-III-D", department: "CSE", semester: 3, section: "D" },
+  { key: "CSE-III-E", department: "CSE", semester: 3, section: "E" },
+  { key: "CSE-V-A", department: "CSE", semester: 5, section: "A" },
+  { key: "CSE-V-B", department: "CSE", semester: 5, section: "B" },
+  { key: "CSE-V-C", department: "CSE", semester: 5, section: "C" },
+  { key: "CSE-V-D", department: "CSE", semester: 5, section: "D" },
+  { key: "CSE-V-E", department: "CSE", semester: 5, section: "E" },
+  { key: "IT-III-A", department: "IT", semester: 3, section: "A" },
+  { key: "IT-III-B", department: "IT", semester: 3, section: "B" },
+  { key: "IT-V-A", department: "IT", semester: 5, section: "A" },
+  { key: "IT-V-B", department: "IT", semester: 5, section: "B" },
+  { key: "ECE-III-A", department: "ECE", semester: 3, section: "A" },
+  { key: "ECE-III-B", department: "ECE", semester: 3, section: "B" },
+  { key: "ECE-V-A", department: "ECE", semester: 5, section: "A" },
+  { key: "ECE-V-B", department: "ECE", semester: 5, section: "B" },
+  { key: "EEE-III-A", department: "EEE", semester: 3, section: "A" },
+  { key: "EEE-III-B", department: "EEE", semester: 3, section: "B" },
+  { key: "ME-III-A", department: "ME", semester: 3, section: "A" },
+  { key: "ME-III-B", department: "ME", semester: 3, section: "B" },
+  { key: "CE-III-A", department: "CE", semester: 3, section: "A" },
+  { key: "CE-III-B", department: "CE", semester: 3, section: "B" },
 ];
 
 const students = [
@@ -129,16 +156,20 @@ async function seed() {
   await User.findByIdAndUpdate(studentUser._id, { studentId: createdStudents[0]._id });
   console.log("Linked student user to Aarav Sharma.");
 
-  // Create timetable
-  const timetableEntries = timetable.map(entry => ({
-    ...entry,
-    startTime: periods[entry.period - 1].startTime,
-    endTime: periods[entry.period - 1].endTime,
-    section: "CSE-III-E",
-    semester: 5,
-  }));
-  await Timetable.insertMany(timetableEntries);
-  console.log(`Created ${timetableEntries.length} timetable entries.`);
+  // Create timetable entries for all sections
+  const allTimetableEntries: any[] = [];
+  for (const sec of sections) {
+    const entries = cseTimetable.map(entry => ({
+      ...entry,
+      startTime: periods[entry.period - 1].startTime,
+      endTime: periods[entry.period - 1].endTime,
+      section: sec.key,
+      semester: sec.semester,
+    }));
+    allTimetableEntries.push(...entries);
+  }
+  await Timetable.insertMany(allTimetableEntries);
+  console.log(`Created ${allTimetableEntries.length} timetable entries across ${sections.length} sections.`);
 
   console.log("\nSeed complete!");
   console.log("\nLogin credentials:");

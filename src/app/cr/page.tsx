@@ -17,7 +17,6 @@ interface TimetableEntry {
 }
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-const today = days[new Date().getDay() - 1] || "Monday";
 
 const students = [
   { id: 1, roll: "AU7-007-001", name: "Aarav Sharma", email: "aarav@attendify.com", attendance: 92 },
@@ -36,14 +35,24 @@ export default function CRPage() {
   const [activeTab, setActiveTab] = useState<"today" | "attendance" | "timetable">("today");
   const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
   const [records, setRecords] = useState(initialRecords);
-  const [selectedDay, setSelectedDay] = useState(today);
+  const [selectedDay, setSelectedDay] = useState("Monday");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const dayName = days[new Date().getDay() - 1] || "Monday";
+    setSelectedDay(dayName);
+  }, []);
 
   useEffect(() => {
     fetch("/api/timetable?section=CSE-III-E")
       .then(r => r.json())
-      .then(d => { if (d.success) setTimetable(d.data); setLoading(false); })
-      .catch(() => setLoading(false));
+      .then(d => {
+        if (d.success) setTimetable(d.data);
+        else setError(d.error || "Failed to load timetable");
+        setLoading(false);
+      })
+      .catch(() => { setError("Network error — could not reach the server."); setLoading(false); });
   }, []);
 
   const todaySchedule = timetable.filter(t => t.day === selectedDay).sort((a, b) => a.period - b.period);
@@ -96,7 +105,14 @@ export default function CRPage() {
                 {days.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
-            {todaySchedule.length === 0 ? (
+            {loading ? (
+              <p style={{ color: "#64748b", padding: 20 }}>Loading schedule...</p>
+            ) : error ? (
+              <div style={{ padding: 20, textAlign: "center" }}>
+                <p style={{ color: "#dc2626", marginBottom: 12 }}>{error}</p>
+                <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+              </div>
+            ) : todaySchedule.length === 0 ? (
               <p style={{ color: "#64748b", padding: 20 }}>No classes scheduled for {selectedDay}.</p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -130,7 +146,7 @@ export default function CRPage() {
 
         {activeTab === "attendance" && (
           <div className="card">
-            <div className="card-title">Mark Attendance — {today}</div>
+            <div className="card-title">Mark Attendance — {selectedDay}</div>
             <div className="table-container">
               <table>
                 <thead><tr><th>Roll No</th><th>Student</th><th>Attendance %</th><th>Status</th></tr></thead>
@@ -169,6 +185,14 @@ export default function CRPage() {
         {activeTab === "timetable" && (
           <div className="card">
             <div className="card-title">B.TECH CSE III E — Full Timetable</div>
+            {loading ? (
+              <p style={{ color: "#64748b", padding: 20 }}>Loading timetable...</p>
+            ) : error ? (
+              <div style={{ padding: 20, textAlign: "center" }}>
+                <p style={{ color: "#dc2626", marginBottom: 12 }}>{error}</p>
+                <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+              </div>
+            ) : (
             <div className="table-container">
               <table>
                 <thead>
@@ -201,6 +225,7 @@ export default function CRPage() {
                 </tbody>
               </table>
             </div>
+            )}
           </div>
         )}
       </section>

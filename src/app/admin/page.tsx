@@ -27,17 +27,52 @@ interface TimetableEntry {
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const periodLabels = ["1\n9:30", "2\n10:30", "3\n11:30", "4\n12:30", "5\n13:30", "6\n14:30", "7\n15:30", "8\n16:30"];
 
+const sections = [
+  { key: "CSE-III-A", label: "B.TECH CSE III A" },
+  { key: "CSE-III-B", label: "B.TECH CSE III B" },
+  { key: "CSE-III-C", label: "B.TECH CSE III C" },
+  { key: "CSE-III-D", label: "B.TECH CSE III D" },
+  { key: "CSE-III-E", label: "B.TECH CSE III E" },
+  { key: "CSE-V-A", label: "B.TECH CSE V A" },
+  { key: "CSE-V-B", label: "B.TECH CSE V B" },
+  { key: "CSE-V-C", label: "B.TECH CSE V C" },
+  { key: "CSE-V-D", label: "B.TECH CSE V D" },
+  { key: "CSE-V-E", label: "B.TECH CSE V E" },
+  { key: "IT-III-A", label: "B.TECH IT III A" },
+  { key: "IT-III-B", label: "B.TECH IT III B" },
+  { key: "IT-V-A", label: "B.TECH IT V A" },
+  { key: "IT-V-B", label: "B.TECH IT V B" },
+  { key: "ECE-III-A", label: "B.TECH ECE III A" },
+  { key: "ECE-III-B", label: "B.TECH ECE III B" },
+  { key: "ECE-V-A", label: "B.TECH ECE V A" },
+  { key: "ECE-V-B", label: "B.TECH ECE V B" },
+  { key: "EEE-III-A", label: "B.TECH EEE III A" },
+  { key: "EEE-III-B", label: "B.TECH EEE III B" },
+  { key: "ME-III-A", label: "B.TECH ME III A" },
+  { key: "ME-III-B", label: "B.TECH ME III B" },
+  { key: "CE-III-A", label: "B.TECH CE III A" },
+  { key: "CE-III-B", label: "B.TECH CE III B" },
+];
+
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<"dashboard" | "users" | "timetable">("dashboard");
+  const [selectedSection, setSelectedSection] = useState("CSE-III-E");
   const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/timetable?section=CSE-III-E")
+    setLoading(true);
+    setError("");
+    fetch(`/api/timetable?section=${selectedSection}`)
       .then(r => r.json())
-      .then(d => { if (d.success) setTimetable(d.data); setLoading(false); })
-      .catch(() => setLoading(false));
-  }, []);
+      .then(d => {
+        if (d.success) setTimetable(d.data);
+        else setError(d.error || "Failed to load timetable");
+        setLoading(false);
+      })
+      .catch(() => { setError("Network error — could not reach the server."); setLoading(false); });
+  }, [selectedSection]);
 
   const getTimetable = (day: string, period: number) =>
     timetable.find(t => t.day === day && t.period === period);
@@ -96,7 +131,25 @@ export default function AdminPage() {
 
         {activeTab === "timetable" && (
           <div className="card">
-            <div className="card-title">B.TECH CSE III E — Class Timetable (w.e.f. 23/07/2026)</div>
+            <div className="card-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span>{sections.find(s => s.key === selectedSection)?.label || selectedSection} — Class Timetable (w.e.f. 23/07/2026)</span>
+              <select
+                className="form-control"
+                style={{ width: "auto", padding: "6px 10px", fontSize: 13 }}
+                value={selectedSection}
+                onChange={e => setSelectedSection(e.target.value)}
+              >
+                {sections.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+              </select>
+            </div>
+            {loading ? (
+              <p style={{ color: "#64748b", padding: 20 }}>Loading timetable...</p>
+            ) : error ? (
+              <div style={{ padding: 20, textAlign: "center" }}>
+                <p style={{ color: "#dc2626", marginBottom: 12 }}>{error}</p>
+                <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+              </div>
+            ) : (
             <div className="table-container">
               <table>
                 <thead>
@@ -127,6 +180,7 @@ export default function AdminPage() {
                 </tbody>
               </table>
             </div>
+            )}
           </div>
         )}
 
