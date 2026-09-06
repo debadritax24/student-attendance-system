@@ -122,6 +122,16 @@ npm run lint
 
 Open [http://localhost:3001](http://localhost:3001) in your browser.
 
+## Deployment (Vercel)
+
+1. Push your repo to GitHub
+2. Import the project on [Vercel](https://vercel.com)
+3. Add the following environment variables in the Vercel dashboard:
+   - `MONGODB_URI` — your MongoDB Atlas connection string
+   - `JWT_SECRET` — a strong random secret
+   - `FRONTEND_URL` — your Vercel deployment URL (e.g., `https://your-app.vercel.app`)
+4. Deploy
+
 ## API Endpoints
 
 ### Authentication

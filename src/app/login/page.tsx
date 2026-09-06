@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = "";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

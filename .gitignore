@@ -1,7 +1,23 @@
+# Environment variables
 .env
-.env.*
-!.env.example
+.env.local
+.env.development
+.env.test
+.env.production
+.env*.local
+
+# Next.js
 .next
+out/
+
+# Dependencies
 node_modules
+
+# Misc
+*.log
+.DS_Store
+Thumbs.db
+
+# Legacy
 server/.next
 server/node_modules
