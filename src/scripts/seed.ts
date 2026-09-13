@@ -3,7 +3,23 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const rawUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/attendify";
-const MONGODB_URI = rawUri.includes("/attendify") ? rawUri : rawUri.replace(/\/\?/, "/attendify?");
+// If the URI already contains a database path (e.g. /attendify), use it as-is.
+// For Atlas URIs like mongodb+srv://...@cluster.mongodb.net/dbname?opts,
+// strip the database and append /attendify.
+const MONGODB_URI = (() => {
+  try {
+    const url = new URL(rawUri);
+    // If path is just "/" or empty, append /attendify
+    if (!url.pathname || url.pathname === "/") {
+      url.pathname = "/attendify";
+      return url.toString();
+    }
+    return rawUri;
+  } catch {
+    // Local URIs (mongodb://127.0.0.1:27017) — use as-is
+    return rawUri;
+  }
+})();
 
 const userSchema = new mongoose.Schema({
   name: String, email: String, passwordHash: String,

@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
+import { useRouter } from "next/navigation";
 
 interface User {
   name: string;
@@ -25,6 +26,7 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const saved = localStorage.getItem("attendifyUser");
@@ -38,11 +40,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("attendifyUser");
     setUser(null);
-    window.location.href = "/login";
-  };
+    router.push("/login");
+  }, [router]);
 
   return (
     <AuthContext.Provider value={{ user, setUser, logout, isLoading }}>
