@@ -106,34 +106,34 @@ export default function CRPage() {
               </select>
             </div>
             {loading ? (
-              <p style={{ color: "#64748b", padding: 20 }}>Loading schedule...</p>
+              <p style={{ color: "var(--text-muted)", padding: 20 }}>Loading schedule...</p>
             ) : error ? (
               <div style={{ padding: 20, textAlign: "center" }}>
-                <p style={{ color: "#dc2626", marginBottom: 12 }}>{error}</p>
+                <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>
                 <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
               </div>
             ) : todaySchedule.length === 0 ? (
-              <p style={{ color: "#64748b", padding: 20 }}>No classes scheduled for {selectedDay}.</p>
+              <p style={{ color: "var(--text-muted)", padding: 20 }}>No classes scheduled for {selectedDay}.</p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {todaySchedule.map((entry, i) => {
                   const isCurrent = currentPeriod && entry.period === currentPeriod.period;
                   return (
-                    <div key={i} style={{ display: "flex", gap: 16, padding: "14px 16px", borderRadius: 10, border: isCurrent ? "2px solid #6366f1" : "1px solid #e2e8f0", background: isCurrent ? "#eef2ff" : "white" }}>
+                    <div key={i} style={{ display: "flex", gap: 16, padding: "14px 16px", borderRadius: 10, border: isCurrent ? "1px solid rgba(0,212,255,0.3)" : "1px solid var(--border)", background: isCurrent ? "rgba(0,212,255,0.05)" : "rgba(255,255,255,0.02)" }}>
                       <div style={{ minWidth: 80, textAlign: "center" }}>
-                        <div style={{ fontWeight: 700, color: "#6366f1" }}>Period {entry.period}</div>
-                        <div style={{ fontSize: 12, color: "#64748b" }}>{entry.startTime} - {entry.endTime}</div>
+                        <div style={{ fontWeight: 700, color: "var(--primary)", fontSize: 13 }}>Period {entry.period}</div>
+                        <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{entry.startTime} - {entry.endTime}</div>
                       </div>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 600 }}>{entry.subject}</div>
-                        <div style={{ fontSize: 12, color: "#64748b" }}>{entry.subjectCode}</div>
-                        {entry.faculty && <div style={{ fontSize: 12, color: "#64748b" }}>{entry.faculty}</div>}
+                        <div style={{ fontWeight: 600, color: "var(--text)" }}>{entry.subject}</div>
+                        <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{entry.subjectCode}</div>
+                        {entry.faculty && <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{entry.faculty}</div>}
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <span className={`badge ${entry.type === "lab" ? "badge-primary" : entry.type === "library" ? "badge-success" : entry.type === "activity" ? "badge-warning" : "badge-present"}`}>
                           {entry.type === "lab" ? "Lab" : entry.type === "library" ? "Library" : entry.type === "activity" ? "Activity" : "Lecture"}
                         </span>
-                        {entry.location && <span style={{ fontSize: 11, color: "#16a34a" }}>{entry.location}</span>}
+                        {entry.location && <span style={{ fontSize: 11, color: "var(--success)" }}>{entry.location}</span>}
                         {isCurrent && <span className="badge badge-primary">NOW</span>}
                       </div>
                     </div>
@@ -186,10 +186,10 @@ export default function CRPage() {
           <div className="card">
             <div className="card-title">B.TECH CSE III E — Full Timetable</div>
             {loading ? (
-              <p style={{ color: "#64748b", padding: 20 }}>Loading timetable...</p>
+              <p style={{ color: "var(--text-muted)", padding: 20 }}>Loading timetable...</p>
             ) : error ? (
               <div style={{ padding: 20, textAlign: "center" }}>
-                <p style={{ color: "#dc2626", marginBottom: 12 }}>{error}</p>
+                <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>
                 <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
               </div>
             ) : (
@@ -209,14 +209,14 @@ export default function CRPage() {
                       <td><strong>{day}</strong></td>
                       {Array.from({ length: 8 }, (_, i) => {
                         const entry = timetable.find(t => t.day === day && t.period === i + 1);
-                        if (!entry) return <td key={i} style={{ background: "#f8fafc" }}></td>;
-                        const bg = entry.type === "lab" ? "#eef2ff" : entry.type === "library" ? "#f0fdf4" : entry.type === "activity" ? "#fef3c7" : "";
+                        if (!entry) return <td key={i} style={{ background: "rgba(255,255,255,0.02)" }}></td>;
+                        const bg = entry.type === "lab" ? "rgba(0,212,255,0.06)" : entry.type === "library" ? "rgba(0,230,118,0.06)" : entry.type === "activity" ? "rgba(255,140,66,0.06)" : "";
                         return (
                           <td key={i} style={{ background: bg, padding: 6, fontSize: 11, lineHeight: 1.3, verticalAlign: "top" }}>
-                            <div style={{ fontWeight: 600 }}>{entry.subject}</div>
-                            {entry.subjectCode && <div style={{ color: "#6366f1", fontSize: 10 }}>{entry.subjectCode}</div>}
-                            {entry.faculty && <div style={{ color: "#64748b", fontSize: 10 }}>{entry.faculty}</div>}
-                            {entry.location && <div style={{ color: "#16a34a", fontSize: 10 }}>{entry.location}</div>}
+                            <div style={{ fontWeight: 600, color: "var(--text)" }}>{entry.subject}</div>
+                            {entry.subjectCode && <div style={{ color: "var(--primary)", fontSize: 10 }}>{entry.subjectCode}</div>}
+                            {entry.faculty && <div style={{ color: "var(--text-muted)", fontSize: 10 }}>{entry.faculty}</div>}
+                            {entry.location && <div style={{ color: "var(--success)", fontSize: 10 }}>{entry.location}</div>}
                           </td>
                         );
                       })}

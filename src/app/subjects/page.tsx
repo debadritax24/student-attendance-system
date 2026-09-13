@@ -51,21 +51,21 @@ export default function SubjectsPage() {
 
         <div className="grid-2">
           {filtered.length === 0 ? (
-            <div className="card"><h3>No subjects found</h3><p style={{ color: "#64748b" }}>Try another search.</p></div>
+            <div className="card"><h3>No subjects found</h3><p style={{ color: "var(--text-muted)" }}>Try another search.</p></div>
           ) : filtered.map(s => (
             <div className="card" key={s.id}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 15 }}>
                 <div>
                   <span className="badge badge-primary">{s.code}</span>
-                  <h2 style={{ marginTop: 12 }}>{s.name}</h2>
-                  <p style={{ color: "#64748b", marginTop: 5 }}>{s.faculty}</p>
+                  <h2 style={{ marginTop: 12, fontSize: 28, textTransform: "uppercase", letterSpacing: "0.04em" }}>{s.name}</h2>
+                  <p style={{ color: "var(--text-secondary)", marginTop: 5 }}>{s.faculty}</p>
                 </div>
                 <button className="btn btn-danger" onClick={() => handleDelete(s.id)}>Delete</button>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginTop: 20 }}>
-                <div><small style={{ color: "#64748b" }}>Semester</small><strong style={{ display: "block" }}>{s.semester}</strong></div>
-                <div><small style={{ color: "#64748b" }}>Section</small><strong style={{ display: "block" }}>{s.section}</strong></div>
-                <div><small style={{ color: "#64748b" }}>Classes</small><strong style={{ display: "block" }}>{s.classes}</strong></div>
+                <div><small style={{ color: "var(--text-muted)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em" }}>Semester</small><strong style={{ display: "block", color: "var(--text)" }}>{s.semester}</strong></div>
+                <div><small style={{ color: "var(--text-muted)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em" }}>Section</small><strong style={{ display: "block", color: "var(--text)" }}>{s.section}</strong></div>
+                <div><small style={{ color: "var(--text-muted)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em" }}>Classes</small><strong style={{ display: "block", color: "var(--text)" }}>{s.classes}</strong></div>
               </div>
             </div>
           ))}

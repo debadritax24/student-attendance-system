@@ -75,7 +75,7 @@ export default function LoginPage() {
               {loading ? "Signing In..." : "Sign In"}
             </button>
           </form>
-          {error && <p style={{ color: "#dc2626", marginTop: 12, textAlign: "center" }}>{error}</p>}
+          {error && <p style={{ color: "var(--danger)", marginTop: 12, textAlign: "center" }}>{error}</p>}
         </div>
       </div>
     </div>

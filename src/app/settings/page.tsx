@@ -20,7 +20,7 @@ export default function SettingsPage() {
         <div className="card">
           <div className="card-title">Appearance</div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 20 }}>
-            <div><strong>Dark Mode</strong><p style={{ color: "#64748b" }}>Use a darker interface.</p></div>
+            <div><strong style={{ color: "var(--text)" }}>Dark Mode</strong><p style={{ color: "var(--text-muted)" }}>Use a darker interface.</p></div>
             <label><input type="checkbox" checked={darkMode} onChange={e => setDarkMode(e.target.checked)} /> Enable</label>
           </div>
         </div>
@@ -29,15 +29,15 @@ export default function SettingsPage() {
           <div className="card-title">Notifications</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span><strong>Attendance Alerts</strong><small style={{ display: "block", color: "#64748b" }}>Get notified about low attendance.</small></span>
+              <span><strong style={{ color: "var(--text)" }}>Attendance Alerts</strong><small style={{ display: "block", color: "var(--text-muted)" }}>Get notified about low attendance.</small></span>
               <input type="checkbox" defaultChecked />
             </label>
             <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span><strong>Class Reminders</strong><small style={{ display: "block", color: "#64748b" }}>Receive reminders for upcoming classes.</small></span>
+              <span><strong style={{ color: "var(--text)" }}>Class Reminders</strong><small style={{ display: "block", color: "var(--text-muted)" }}>Receive reminders for upcoming classes.</small></span>
               <input type="checkbox" defaultChecked />
             </label>
             <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span><strong>System Notifications</strong><small style={{ display: "block", color: "#64748b" }}>Receive important system updates.</small></span>
+              <span><strong style={{ color: "var(--text)" }}>System Notifications</strong><small style={{ display: "block", color: "var(--text-muted)" }}>Receive important system updates.</small></span>
               <input type="checkbox" defaultChecked />
             </label>
           </div>

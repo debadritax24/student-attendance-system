@@ -107,14 +107,14 @@ export default function StudentsPage() {
               <thead><tr><th>Roll No</th><th>Student</th><th>Department</th><th>Semester</th><th>Section</th><th>Attendance</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody>
                 {filtered.length === 0 ? (
-                  <tr><td colSpan={8} style={{ textAlign: "center", padding: 40 }}>No students found.</td></tr>
+                  <tr><td colSpan={8} style={{ textAlign: "center", padding: 40, color: "var(--text-muted)" }}>No students found.</td></tr>
                 ) : filtered.map(s => (
                   <tr key={s.id}>
                     <td><strong>{s.roll}</strong></td>
                     <td>
                       <div className="user">
                         <div className="avatar">{getInitials(s.name)}</div>
-                        <div><strong>{s.name}</strong><small style={{ display: "block", color: "#64748b" }}>{s.email}</small></div>
+                        <div><strong style={{ color: "var(--text)" }}>{s.name}</strong><small style={{ display: "block", color: "var(--text-muted)" }}>{s.email}</small></div>
                       </div>
                     </td>
                     <td>{s.department}</td><td>{s.semester}</td><td>{s.section}</td>

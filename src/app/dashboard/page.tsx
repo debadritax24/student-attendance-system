@@ -17,7 +17,7 @@ export default function DashboardPage() {
       <section className="content">
         <div className="page-header">
           <div>
-            <h1>Good Evening, {user?.name?.split(" ")[0] || "User"} 👋</h1>
+            <h1>Good Evening, {user?.name?.split(" ")[0] || "User"}</h1>
             <p>Here&apos;s what&apos;s happening with attendance today.</p>
           </div>
           <a href="/attendance" className="btn btn-primary">+ Mark Attendance</a>

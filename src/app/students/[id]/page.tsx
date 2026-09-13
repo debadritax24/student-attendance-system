@@ -32,7 +32,7 @@ export default function StudentDetailPage() {
       <AppShell>
         <Navbar title="Student Details" />
         <section className="content">
-          <div className="card"><h2>Student not found</h2><a href="/students" style={{ color: "#6366f1" }}>← Back to Students</a></div>
+          <div className="card"><h2>Student not found</h2><a href="/students" style={{ color: "var(--primary)" }}>← Back to Students</a></div>
         </section>
       </AppShell>
     );
@@ -44,7 +44,7 @@ export default function StudentDetailPage() {
       <section className="content">
         <div className="page-header">
           <div>
-            <a href="/students" style={{ color: "#6366f1" }}>← Back to Students</a>
+            <a href="/students" style={{ color: "var(--primary)" }}>← Back to Students</a>
             <h1 style={{ marginTop: 10 }}>{student.name}</h1>
             <p>{student.roll} | {student.department} | Semester {student.semester} | Section {student.section}</p>
           </div>
@@ -54,8 +54,8 @@ export default function StudentDetailPage() {
           <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
             <div className="avatar" style={{ width: 70, height: 70, fontSize: 22 }}>{getInitials(student.name)}</div>
             <div>
-              <h2>{student.name}</h2>
-              <p style={{ color: "#64748b" }}>{student.email}</p>
+              <h2 style={{ fontSize: 32, textTransform: "uppercase", letterSpacing: "0.04em" }}>{student.name}</h2>
+              <p style={{ color: "var(--text-secondary)" }}>{student.email}</p>
             </div>
           </div>
         </div>
@@ -68,8 +68,8 @@ export default function StudentDetailPage() {
         </div>
 
         {student.attendance < 75 && (
-          <div className="card" style={{ background: "#fff7ed" }}>
-            <strong>⚠ Attendance Warning</strong>
+          <div className="card" style={{ background: "rgba(255,140,66,0.06)", borderColor: "rgba(255,140,66,0.15)" }}>
+            <strong style={{ color: "var(--warning)" }}>⚠ Attendance Warning</strong>
             <p>This student&apos;s attendance is below 75%. Immediate attention may be required.</p>
           </div>
         )}

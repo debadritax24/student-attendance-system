@@ -24,8 +24,8 @@ export default function ProfilePage() {
               {name.split(" ").map((w: string) => w[0]).join("").substring(0, 2).toUpperCase()}
             </div>
             <div>
-              <h2>{name}</h2>
-              <p style={{ color: "#64748b" }}>Class Representative</p>
+              <h2 style={{ fontSize: 32, textTransform: "uppercase", letterSpacing: "0.04em" }}>{name}</h2>
+              <p style={{ color: "var(--text-secondary)" }}>Class Representative</p>
               <span className="badge badge-primary">{user?.role || "CR"}</span>
             </div>
           </div>

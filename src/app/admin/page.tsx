@@ -143,10 +143,10 @@ export default function AdminPage() {
               </select>
             </div>
             {loading ? (
-              <p style={{ color: "#64748b", padding: 20 }}>Loading timetable...</p>
+              <p style={{ color: "var(--text-muted)", padding: 20 }}>Loading timetable...</p>
             ) : error ? (
               <div style={{ padding: 20, textAlign: "center" }}>
-                <p style={{ color: "#dc2626", marginBottom: 12 }}>{error}</p>
+                <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>
                 <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
               </div>
             ) : (
@@ -164,14 +164,14 @@ export default function AdminPage() {
                       <td><strong>{day}</strong></td>
                       {Array.from({ length: 8 }, (_, i) => {
                         const entry = getTimetable(day, i + 1);
-                        if (!entry) return <td key={i} style={{ background: "#f8fafc" }}></td>;
-                        const bg = entry.type === "lab" ? "#eef2ff" : entry.type === "library" ? "#f0fdf4" : entry.type === "activity" ? "#fef3c7" : "";
+                        if (!entry) return <td key={i} style={{ background: "rgba(255,255,255,0.02)" }}></td>;
+                        const bg = entry.type === "lab" ? "rgba(0,212,255,0.06)" : entry.type === "library" ? "rgba(0,230,118,0.06)" : entry.type === "activity" ? "rgba(255,140,66,0.06)" : "";
                         return (
                           <td key={i} style={{ background: bg, padding: 6, fontSize: 11, lineHeight: 1.3, verticalAlign: "top" }}>
-                            <div style={{ fontWeight: 600 }}>{entry.subject}</div>
-                            {entry.subjectCode && <div style={{ color: "#6366f1", fontSize: 10 }}>{entry.subjectCode}</div>}
-                            {entry.faculty && <div style={{ color: "#64748b", fontSize: 10 }}>{entry.faculty}</div>}
-                            {entry.location && <div style={{ color: "#16a34a", fontSize: 10 }}>{entry.location}</div>}
+                            <div style={{ fontWeight: 600, color: "var(--text)" }}>{entry.subject}</div>
+                            {entry.subjectCode && <div style={{ color: "var(--primary)", fontSize: 10 }}>{entry.subjectCode}</div>}
+                            {entry.faculty && <div style={{ color: "var(--text-muted)", fontSize: 10 }}>{entry.faculty}</div>}
+                            {entry.location && <div style={{ color: "var(--success)", fontSize: 10 }}>{entry.location}</div>}
                           </td>
                         );
                       })}
@@ -189,14 +189,14 @@ export default function AdminPage() {
             <div className="card">
               <div className="card-title">Recent Activity</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #e2e8f0" }}>
-                  <span>Admin logged in</span><span style={{ color: "#64748b" }}>Just now</span>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--border)" }}>
+                  <span>Admin logged in</span><span style={{ color: "var(--text-muted)" }}>Just now</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #e2e8f0" }}>
-                  <span>Database seeded with timetable</span><span style={{ color: "#64748b" }}>Today</span>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--border)" }}>
+                  <span>Database seeded with timetable</span><span style={{ color: "var(--text-muted)" }}>Today</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0" }}>
-                  <span>System initialized</span><span style={{ color: "#64748b" }}>Today</span>
+                  <span>System initialized</span><span style={{ color: "var(--text-muted)" }}>Today</span>
                 </div>
               </div>
             </div>

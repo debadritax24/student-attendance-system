@@ -48,7 +48,7 @@ export default function HistoryPage() {
               <thead><tr><th>Date</th><th>Subject</th><th>Period</th><th>Present</th><th>Absent</th><th>Percentage</th><th>Marked By</th></tr></thead>
               <tbody>
                 {filtered.length === 0 ? (
-                  <tr><td colSpan={7} style={{ textAlign: "center", padding: 40 }}>No records found.</td></tr>
+                  <tr><td colSpan={7} style={{ textAlign: "center", padding: 40, color: "var(--text-muted)" }}>No records found.</td></tr>
                 ) : filtered.map((r, i) => (
                   <tr key={i}>
                     <td>{r.date}</td>
