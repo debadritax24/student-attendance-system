@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
+import { Users, GraduationCap, BookOpen, Activity, RefreshCw } from "lucide-react";
 
 interface User {
   _id: string;
@@ -86,13 +87,33 @@ export default function AdminPage() {
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card"><div className="stat-header">Total Users</div><div className="stat-value">3</div><div className="stat-change success">Active</div></div>
-          <div className="stat-card"><div className="stat-header">Total Students</div><div className="stat-value">8</div><div className="stat-change success">Enrolled</div></div>
-          <div className="stat-card"><div className="stat-header">Total Subjects</div><div className="stat-value">6</div><div className="stat-change success">This semester</div></div>
-          <div className="stat-card"><div className="stat-header">System Status</div><div className="stat-value">OK</div><div className="stat-change success">All systems operational</div></div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-blue"><Users size={20} /></div>
+            <div className="stat-header">Total Users</div>
+            <div className="stat-value">3</div>
+            <div className="stat-change success">Active</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-green"><GraduationCap size={20} /></div>
+            <div className="stat-header">Total Students</div>
+            <div className="stat-value">8</div>
+            <div className="stat-change success">Enrolled</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-orange"><BookOpen size={20} /></div>
+            <div className="stat-header">Total Subjects</div>
+            <div className="stat-value">6</div>
+            <div className="stat-change success">This semester</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-cyan"><Activity size={20} /></div>
+            <div className="stat-header">System Status</div>
+            <div className="stat-value">OK</div>
+            <div className="stat-change success">All systems operational</div>
+          </div>
         </div>
 
-        <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        <div className="tab-buttons">
           <button className={`btn ${activeTab === "dashboard" ? "btn-primary" : "btn-secondary"}`} onClick={() => setActiveTab("dashboard")}>Dashboard</button>
           <button className={`btn ${activeTab === "users" ? "btn-primary" : "btn-secondary"}`} onClick={() => setActiveTab("users")}>Users</button>
           <button className={`btn ${activeTab === "timetable" ? "btn-primary" : "btn-secondary"}`} onClick={() => setActiveTab("timetable")}>Timetable</button>
@@ -131,7 +152,7 @@ export default function AdminPage() {
 
         {activeTab === "timetable" && (
           <div className="card">
-            <div className="card-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div className="card-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
               <span>{sections.find(s => s.key === selectedSection)?.label || selectedSection} — Class Timetable (w.e.f. 23/07/2026)</span>
               <select
                 className="form-control"
@@ -147,7 +168,7 @@ export default function AdminPage() {
             ) : error ? (
               <div style={{ padding: 20, textAlign: "center" }}>
                 <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>
-                <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+                <button className="btn btn-primary" onClick={() => window.location.reload()}><RefreshCw size={16} /> Retry</button>
               </div>
             ) : (
             <div className="table-container">

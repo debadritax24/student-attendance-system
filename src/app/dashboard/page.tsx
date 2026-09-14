@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
+import { Users, UserCheck, UserX, TrendingUp, Plus } from "lucide-react";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -20,26 +21,30 @@ export default function DashboardPage() {
             <h1>Good Evening, {user?.name?.split(" ")[0] || "User"}</h1>
             <p>Here&apos;s what&apos;s happening with attendance today.</p>
           </div>
-          <a href="/attendance" className="btn btn-primary">+ Mark Attendance</a>
+          <a href="/attendance" className="btn btn-primary"><Plus size={16} /> Mark Attendance</a>
         </div>
 
         <div className="stats-grid">
           <div className="stat-card">
+            <div className="stat-icon stat-icon-blue"><Users size={20} /></div>
             <div className="stat-header">Total Students</div>
             <div className="stat-value">120</div>
             <div className="stat-change success">Active students</div>
           </div>
           <div className="stat-card">
+            <div className="stat-icon stat-icon-green"><UserCheck size={20} /></div>
             <div className="stat-header">Present Today</div>
             <div className="stat-value">108</div>
             <div className="stat-change success">+5 from yesterday</div>
           </div>
           <div className="stat-card">
+            <div className="stat-icon stat-icon-red"><UserX size={20} /></div>
             <div className="stat-header">Absent Today</div>
             <div className="stat-value">12</div>
             <div className="stat-change danger">10% absent</div>
           </div>
           <div className="stat-card">
+            <div className="stat-icon stat-icon-cyan"><TrendingUp size={20} /></div>
             <div className="stat-header">Attendance</div>
             <div className="stat-value">90%</div>
             <div className="stat-change success">+2.4% this week</div>

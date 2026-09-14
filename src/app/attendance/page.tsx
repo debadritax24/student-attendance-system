@@ -4,6 +4,7 @@ import { useState } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
+import { CheckCheck, Search } from "lucide-react";
 
 const students = [
   { id: 1, roll: "AU001", name: "Aarav Sharma", attendance: 92 },
@@ -61,7 +62,7 @@ export default function AttendancePage() {
         <div className="card">
           <div className="page-header">
             <div className="search-box"><input type="text" placeholder="Search student..." value={search} onChange={e => setSearch(e.target.value)} /></div>
-            {canEdit && <button className="btn btn-secondary" onClick={markAllPresent}>✓ Mark All Present</button>}
+            {canEdit && <button className="btn btn-secondary" onClick={markAllPresent}><CheckCheck size={16} /> Mark All Present</button>}
           </div>
           <div className="table-container">
             <table>

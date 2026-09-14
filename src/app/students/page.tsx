@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
+import { Users, TrendingUp, CheckCircle, AlertTriangle, Plus, Search } from "lucide-react";
 
 const students = [
   { id: 1, roll: "AU001", name: "Aarav Sharma", email: "aarav@example.com", department: "CSE", semester: 5, section: "A", attendance: 92 },
@@ -71,14 +72,30 @@ export default function StudentsPage() {
       <section className="content">
         <div className="page-header">
           <div><h1>Students</h1><p>Manage students and monitor their attendance.</p></div>
-          {role === "ADMIN" && <button className="btn btn-primary" onClick={() => setShowAdd(true)}>+ Add Student</button>}
+          {role === "ADMIN" && <button className="btn btn-primary" onClick={() => setShowAdd(true)}><Plus size={16} /> Add Student</button>}
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card"><div className="stat-header">Total Students</div><div className="stat-value">{total}</div></div>
-          <div className="stat-card"><div className="stat-header">Average Attendance</div><div className="stat-value">{average}%</div></div>
-          <div className="stat-card"><div className="stat-header">Above 75%</div><div className="stat-value">{above}</div></div>
-          <div className="stat-card"><div className="stat-header">Below 75%</div><div className="stat-value">{total - above}</div></div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-blue"><Users size={20} /></div>
+            <div className="stat-header">Total Students</div>
+            <div className="stat-value">{total}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-cyan"><TrendingUp size={20} /></div>
+            <div className="stat-header">Average Attendance</div>
+            <div className="stat-value">{average}%</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-green"><CheckCircle size={20} /></div>
+            <div className="stat-header">Above 75%</div>
+            <div className="stat-value">{above}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-orange"><AlertTriangle size={20} /></div>
+            <div className="stat-header">Below 75%</div>
+            <div className="stat-value">{total - above}</div>
+          </div>
         </div>
 
         <div className="card">
@@ -124,7 +141,7 @@ export default function StudentsPage() {
                     </td>
                     <td><span className={`badge ${s.attendance >= 75 ? "badge-present" : "badge-warning"}`}>{s.attendance >= 75 ? "Good" : "Warning"}</span></td>
                     <td>
-                      <div style={{ display: "flex", gap: 6 }}>
+                      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                         <a href={`/students/${s.id}`} className="btn btn-secondary">View</a>
                         {role !== "STUDENT" && <button className="btn btn-secondary" onClick={() => { setEditStudent({ ...s }); setShowEdit(true); }}>Edit</button>}
                         {role === "ADMIN" && <button className="btn btn-danger" onClick={() => handleDelete(s.id)}>Delete</button>}

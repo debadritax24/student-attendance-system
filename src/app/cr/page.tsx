@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
+import { Users, UserCheck, UserX, TrendingUp, RefreshCw, Clock } from "lucide-react";
 
 interface TimetableEntry {
   day: string;
@@ -85,13 +86,31 @@ export default function CRPage() {
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card"><div className="stat-header">Total Students</div><div className="stat-value">{total}</div></div>
-          <div className="stat-card"><div className="stat-header">Present Today</div><div className="stat-value">{present}</div><div className="stat-change success">+{present} from roll</div></div>
-          <div className="stat-card"><div className="stat-header">Absent Today</div><div className="stat-value">{absent}</div><div className="stat-change danger">{absent > 0 ? `${Math.round((absent/total)*100)}% absent` : "All present"}</div></div>
-          <div className="stat-card"><div className="stat-header">Attendance</div><div className="stat-value">{pct}%</div></div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-blue"><Users size={20} /></div>
+            <div className="stat-header">Total Students</div>
+            <div className="stat-value">{total}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-green"><UserCheck size={20} /></div>
+            <div className="stat-header">Present Today</div>
+            <div className="stat-value">{present}</div>
+            <div className="stat-change success">+{present} from roll</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-red"><UserX size={20} /></div>
+            <div className="stat-header">Absent Today</div>
+            <div className="stat-value">{absent}</div>
+            <div className="stat-change danger">{absent > 0 ? `${Math.round((absent/total)*100)}% absent` : "All present"}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-cyan"><TrendingUp size={20} /></div>
+            <div className="stat-header">Attendance</div>
+            <div className="stat-value">{pct}%</div>
+          </div>
         </div>
 
-        <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        <div className="tab-buttons">
           <button className={`btn ${activeTab === "today" ? "btn-primary" : "btn-secondary"}`} onClick={() => setActiveTab("today")}>Today&apos;s Schedule</button>
           <button className={`btn ${activeTab === "attendance" ? "btn-primary" : "btn-secondary"}`} onClick={() => setActiveTab("attendance")}>Mark Attendance</button>
           <button className={`btn ${activeTab === "timetable" ? "btn-primary" : "btn-secondary"}`} onClick={() => setActiveTab("timetable")}>Full Timetable</button>
@@ -99,9 +118,9 @@ export default function CRPage() {
 
         {activeTab === "today" && (
           <div className="card">
-            <div className="card-title">
+            <div className="card-title" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               {selectedDay}&apos;s Schedule
-              <select className="form-control" style={{ width: "auto", marginLeft: 12, display: "inline-block", padding: "4px 8px", fontSize: 13 }} value={selectedDay} onChange={e => setSelectedDay(e.target.value)}>
+              <select className="form-control" style={{ width: "auto", display: "inline-block", padding: "4px 8px", fontSize: 13 }} value={selectedDay} onChange={e => setSelectedDay(e.target.value)}>
                 {days.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
@@ -110,7 +129,7 @@ export default function CRPage() {
             ) : error ? (
               <div style={{ padding: 20, textAlign: "center" }}>
                 <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>
-                <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+                <button className="btn btn-primary" onClick={() => window.location.reload()}><RefreshCw size={16} /> Retry</button>
               </div>
             ) : todaySchedule.length === 0 ? (
               <p style={{ color: "var(--text-muted)", padding: 20 }}>No classes scheduled for {selectedDay}.</p>
@@ -119,7 +138,7 @@ export default function CRPage() {
                 {todaySchedule.map((entry, i) => {
                   const isCurrent = currentPeriod && entry.period === currentPeriod.period;
                   return (
-                    <div key={i} style={{ display: "flex", gap: 16, padding: "14px 16px", borderRadius: 10, border: isCurrent ? "1px solid rgba(0,212,255,0.3)" : "1px solid var(--border)", background: isCurrent ? "rgba(0,212,255,0.05)" : "rgba(255,255,255,0.02)" }}>
+                    <div key={i} className={`schedule-item ${isCurrent ? "schedule-item-active" : ""}`}>
                       <div style={{ minWidth: 80, textAlign: "center" }}>
                         <div style={{ fontWeight: 700, color: "var(--primary)", fontSize: 13 }}>Period {entry.period}</div>
                         <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{entry.startTime} - {entry.endTime}</div>
@@ -129,7 +148,7 @@ export default function CRPage() {
                         <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{entry.subjectCode}</div>
                         {entry.faculty && <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{entry.faculty}</div>}
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                         <span className={`badge ${entry.type === "lab" ? "badge-primary" : entry.type === "library" ? "badge-success" : entry.type === "activity" ? "badge-warning" : "badge-present"}`}>
                           {entry.type === "lab" ? "Lab" : entry.type === "library" ? "Library" : entry.type === "activity" ? "Activity" : "Lecture"}
                         </span>
@@ -190,7 +209,7 @@ export default function CRPage() {
             ) : error ? (
               <div style={{ padding: 20, textAlign: "center" }}>
                 <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>
-                <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+                <button className="btn btn-primary" onClick={() => window.location.reload()}><RefreshCw size={16} /> Retry</button>
               </div>
             ) : (
             <div className="table-container">

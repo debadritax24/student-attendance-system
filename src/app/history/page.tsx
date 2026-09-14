@@ -3,6 +3,7 @@
 import { useState } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
+import { Clock, Search } from "lucide-react";
 
 const historyData = [
   { date: "2026-09-05", subject: "Data Structures", period: "1st Period", present: 108, absent: 12, percentage: 90, markedBy: "Debadrita Goswami" },
@@ -33,11 +34,13 @@ export default function HistoryPage() {
 
         <div className="card">
           <div className="filters">
-            <input type="date" className="form-control" value={date} onChange={e => setDate(e.target.value)} />
-            <select className="form-control" value={subject} onChange={e => setSubject(e.target.value)}>
-              <option value="">All Subjects</option>
-              <option>Data Structures</option><option>Database Management</option><option>Operating Systems</option><option>Computer Networks</option>
-            </select>
+            <div><label>Date</label><input type="date" className="form-control" value={date} onChange={e => setDate(e.target.value)} /></div>
+            <div><label>Subject</label>
+              <select className="form-control" value={subject} onChange={e => setSubject(e.target.value)}>
+                <option value="">All Subjects</option>
+                <option>Data Structures</option><option>Database Management</option><option>Operating Systems</option><option>Computer Networks</option>
+              </select>
+            </div>
             <div className="search-box"><input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} /></div>
           </div>
         </div>

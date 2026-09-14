@@ -4,6 +4,7 @@ import { useState } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
+import { User, Mail, Building2, Calendar, Hash, Save } from "lucide-react";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -32,14 +33,32 @@ export default function ProfilePage() {
 
           <form onSubmit={e => { e.preventDefault(); alert("Profile updated successfully"); }}>
             <div className="grid-2">
-              <div className="form-group"><label>Full Name</label><input className="form-control" value={name} onChange={e => setName(e.target.value)} /></div>
-              <div className="form-group"><label>Email</label><input type="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} /></div>
-              <div className="form-group"><label>Department</label><input className="form-control" value="Computer Science & Engineering" readOnly /></div>
-              <div className="form-group"><label>Semester</label><input className="form-control" value="5" readOnly /></div>
-              <div className="form-group"><label>Section</label><input className="form-control" value="A" readOnly /></div>
-              <div className="form-group"><label>Roll Number</label><input className="form-control" value="AU-CR-001" readOnly /></div>
+              <div className="form-group">
+                <label style={{ display: "flex", alignItems: "center", gap: 6 }}><User size={12} /> Full Name</label>
+                <input className="form-control" value={name} onChange={e => setName(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label style={{ display: "flex", alignItems: "center", gap: 6 }}><Mail size={12} /> Email</label>
+                <input type="email" className="form-control" value={email} onChange={e => setEmail(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label style={{ display: "flex", alignItems: "center", gap: 6 }}><Building2 size={12} /> Department</label>
+                <input className="form-control" value="Computer Science & Engineering" readOnly />
+              </div>
+              <div className="form-group">
+                <label style={{ display: "flex", alignItems: "center", gap: 6 }}><Calendar size={12} /> Semester</label>
+                <input className="form-control" value="5" readOnly />
+              </div>
+              <div className="form-group">
+                <label style={{ display: "flex", alignItems: "center", gap: 6 }}><Hash size={12} /> Section</label>
+                <input className="form-control" value="A" readOnly />
+              </div>
+              <div className="form-group">
+                <label style={{ display: "flex", alignItems: "center", gap: 6 }}><Hash size={12} /> Roll Number</label>
+                <input className="form-control" value="AU-CR-001" readOnly />
+              </div>
             </div>
-            <button type="submit" className="btn btn-primary">Save Changes</button>
+            <button type="submit" className="btn btn-primary"><Save size={16} /> Save Changes</button>
           </form>
         </div>
       </section>

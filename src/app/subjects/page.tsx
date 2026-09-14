@@ -3,6 +3,7 @@
 import { useState } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
+import { BookOpen, Plus, Trash2 } from "lucide-react";
 
 const initialSubjects = [
   { id: 1, name: "Data Structures", code: "CS501", faculty: "Dr. Ankit Sen", semester: 5, section: "A", classes: 42 },
@@ -40,7 +41,7 @@ export default function SubjectsPage() {
       <section className="content">
         <div className="page-header">
           <div><h1>Subjects</h1><p>Manage subjects and class information.</p></div>
-          <button className="btn btn-primary" onClick={() => setShowModal(true)}>+ Add Subject</button>
+          <button className="btn btn-primary" onClick={() => setShowModal(true)}><Plus size={16} /> Add Subject</button>
         </div>
 
         <div className="card">
@@ -53,14 +54,19 @@ export default function SubjectsPage() {
           {filtered.length === 0 ? (
             <div className="card"><h3>No subjects found</h3><p style={{ color: "var(--text-muted)" }}>Try another search.</p></div>
           ) : filtered.map(s => (
-            <div className="card" key={s.id}>
+            <div className="card subject-card" key={s.id}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 15 }}>
-                <div>
-                  <span className="badge badge-primary">{s.code}</span>
-                  <h2 style={{ marginTop: 12, fontSize: 28, textTransform: "uppercase", letterSpacing: "0.04em" }}>{s.name}</h2>
-                  <p style={{ color: "var(--text-secondary)", marginTop: 5 }}>{s.faculty}</p>
+                <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                  <div className="stat-icon stat-icon-blue" style={{ flexShrink: 0 }}>
+                    <BookOpen size={20} />
+                  </div>
+                  <div>
+                    <span className="badge badge-primary">{s.code}</span>
+                    <h2 style={{ marginTop: 8, fontSize: 22, textTransform: "uppercase", letterSpacing: "0.04em" }}>{s.name}</h2>
+                    <p style={{ color: "var(--text-secondary)", marginTop: 5 }}>{s.faculty}</p>
+                  </div>
                 </div>
-                <button className="btn btn-danger" onClick={() => handleDelete(s.id)}>Delete</button>
+                <button className="btn btn-danger" onClick={() => handleDelete(s.id)}><Trash2 size={14} /></button>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginTop: 20 }}>
                 <div><small style={{ color: "var(--text-muted)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em" }}>Semester</small><strong style={{ display: "block", color: "var(--text)" }}>{s.semester}</strong></div>

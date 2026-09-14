@@ -2,6 +2,7 @@
 
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
+import { Users, TrendingUp, CheckCircle, AlertTriangle, Printer } from "lucide-react";
 
 const students = [
   { id: 1, roll: "AU001", name: "Aarav Sharma", department: "CSE", attendance: 92 },
@@ -25,14 +26,30 @@ export default function ReportsPage() {
       <section className="content">
         <div className="page-header">
           <div><h1>Attendance Reports</h1><p>Review attendance performance across the class.</p></div>
-          <button className="btn btn-primary" onClick={() => window.print()}>Print Report</button>
+          <button className="btn btn-primary" onClick={() => window.print()}><Printer size={16} /> Print Report</button>
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card"><div className="stat-header">Total Students</div><div className="stat-value">{total}</div></div>
-          <div className="stat-card"><div className="stat-header">Average Attendance</div><div className="stat-value">{average}%</div></div>
-          <div className="stat-card"><div className="stat-header">Meeting Requirement</div><div className="stat-value">{above}</div></div>
-          <div className="stat-card"><div className="stat-header">Needs Attention</div><div className="stat-value">{total - above}</div></div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-blue"><Users size={20} /></div>
+            <div className="stat-header">Total Students</div>
+            <div className="stat-value">{total}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-cyan"><TrendingUp size={20} /></div>
+            <div className="stat-header">Average Attendance</div>
+            <div className="stat-value">{average}%</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-green"><CheckCircle size={20} /></div>
+            <div className="stat-header">Meeting Requirement</div>
+            <div className="stat-value">{above}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-orange"><AlertTriangle size={20} /></div>
+            <div className="stat-header">Needs Attention</div>
+            <div className="stat-value">{total - above}</div>
+          </div>
         </div>
 
         <div className="card">

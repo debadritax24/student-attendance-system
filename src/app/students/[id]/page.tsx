@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
-import { useEffect, useState } from "react";
+import { AlertTriangle, ArrowLeft, Users, BookOpen, CheckCircle, XCircle, TrendingUp } from "lucide-react";
 
 const students = [
   { id: 1, roll: "AU001", name: "Aarav Sharma", email: "aarav@example.com", department: "CSE", semester: 5, section: "A", attendance: 92 },
@@ -32,7 +32,7 @@ export default function StudentDetailPage() {
       <AppShell>
         <Navbar title="Student Details" />
         <section className="content">
-          <div className="card"><h2>Student not found</h2><a href="/students" style={{ color: "var(--primary)" }}>← Back to Students</a></div>
+          <div className="card"><h2>Student not found</h2><a href="/students" style={{ color: "var(--primary)" }}><ArrowLeft size={16} /> Back to Students</a></div>
         </section>
       </AppShell>
     );
@@ -44,7 +44,7 @@ export default function StudentDetailPage() {
       <section className="content">
         <div className="page-header">
           <div>
-            <a href="/students" style={{ color: "var(--primary)" }}>← Back to Students</a>
+            <a href="/students" style={{ color: "var(--primary)", display: "inline-flex", alignItems: "center", gap: 6 }}><ArrowLeft size={16} /> Back to Students</a>
             <h1 style={{ marginTop: 10 }}>{student.name}</h1>
             <p>{student.roll} | {student.department} | Semester {student.semester} | Section {student.section}</p>
           </div>
@@ -61,16 +61,37 @@ export default function StudentDetailPage() {
         </div>
 
         <div className="stats-grid">
-          <div className="stat-card"><div className="stat-header">Overall Attendance</div><div className="stat-value">{student.attendance}%</div></div>
-          <div className="stat-card"><div className="stat-header">Total Classes</div><div className="stat-value">120</div></div>
-          <div className="stat-card"><div className="stat-header">Present</div><div className="stat-value">108</div></div>
-          <div className="stat-card"><div className="stat-header">Absent</div><div className="stat-value">12</div></div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-cyan"><TrendingUp size={20} /></div>
+            <div className="stat-header">Overall Attendance</div>
+            <div className="stat-value">{student.attendance}%</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-blue"><BookOpen size={20} /></div>
+            <div className="stat-header">Total Classes</div>
+            <div className="stat-value">120</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-green"><CheckCircle size={20} /></div>
+            <div className="stat-header">Present</div>
+            <div className="stat-value">108</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-icon stat-icon-red"><XCircle size={20} /></div>
+            <div className="stat-header">Absent</div>
+            <div className="stat-value">12</div>
+          </div>
         </div>
 
         {student.attendance < 75 && (
-          <div className="card" style={{ background: "rgba(255,140,66,0.06)", borderColor: "rgba(255,140,66,0.15)" }}>
-            <strong style={{ color: "var(--warning)" }}>⚠ Attendance Warning</strong>
-            <p>This student&apos;s attendance is below 75%. Immediate attention may be required.</p>
+          <div className="card warning-card">
+            <div className="warning-card-content">
+              <AlertTriangle size={20} />
+              <div>
+                <strong>Attendance Warning</strong>
+                <p>This student&apos;s attendance is below 75%. Immediate attention may be required.</p>
+              </div>
+            </div>
           </div>
         )}
 
