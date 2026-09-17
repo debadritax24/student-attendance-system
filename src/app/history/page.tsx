@@ -1,27 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
-import { Clock, Search } from "lucide-react";
+import { Clock, RefreshCw } from "lucide-react";
 
-const historyData = [
-  { date: "2026-09-05", subject: "Data Structures", period: "1st Period", present: 108, absent: 12, percentage: 90, markedBy: "Debadrita Goswami" },
-  { date: "2026-09-04", subject: "Database Management", period: "2nd Period", present: 104, absent: 16, percentage: 87, markedBy: "Debadrita Goswami" },
-  { date: "2026-09-03", subject: "Operating Systems", period: "3rd Period", present: 98, absent: 22, percentage: 82, markedBy: "Debadrita Goswami" },
-  { date: "2026-09-02", subject: "Computer Networks", period: "1st Period", present: 112, absent: 8, percentage: 93, markedBy: "Debadrita Goswami" },
-];
+interface AttendanceRecord {
+  _id: string;
+  date: string;
+  status: string;
+  note: string;
+  student: { _id: string; name: string; rollNumber: string } | null;
+  subject: { _id: string; name: string; code: string } | null;
+  markedBy: { _id: string; name: string } | null;
+}
+
+interface SubjectOption {
+  _id: string;
+  code: string;
+  name: string;
+}
 
 export default function HistoryPage() {
+  const [records, setRecords] = useState<AttendanceRecord[]>([]);
+  const [subjects, setSubjects] = useState<SubjectOption[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
-  const [subject, setSubject] = useState("");
-  const [date, setDate] = useState("");
+  const [subjectFilter, setSubjectFilter] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
-  const filtered = historyData.filter(r => {
-    const matchSearch = r.subject.toLowerCase().includes(search.toLowerCase());
-    const matchSubject = !subject || r.subject === subject;
-    const matchDate = !date || r.date === date;
-    return matchSearch && matchSubject && matchDate;
+  const fetchHistory = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const params = new URLSearchParams();
+      params.set("limit", "200");
+      if (subjectFilter) params.set("subject", subjectFilter);
+      if (dateFrom) params.set("from", dateFrom);
+      if (dateTo) params.set("to", dateTo);
+      const res = await fetch(`/api/attendance?${params}`, { credentials: "include" });
+      const data = await res.json();
+      if (data.success) setRecords(data.data.items || []);
+      else setError(data.error || "Failed to load history");
+    } catch {
+      setError("Network error.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchSubjects = async () => {
+    try {
+      const res = await fetch("/api/subjects?limit=200", { credentials: "include" });
+      const data = await res.json();
+      if (data.success) setSubjects(data.data.items || []);
+    } catch {}
+  };
+
+  useEffect(() => { fetchHistory(); fetchSubjects(); }, []);
+  useEffect(() => { fetchHistory(); }, [subjectFilter, dateFrom, dateTo]);
+
+  const filtered = records.filter(r => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return (
+      r.student?.name?.toLowerCase().includes(q) ||
+      r.student?.rollNumber?.toLowerCase().includes(q) ||
+      r.subject?.name?.toLowerCase().includes(q) ||
+      r.subject?.code?.toLowerCase().includes(q)
+    );
   });
 
   return (
@@ -30,41 +79,55 @@ export default function HistoryPage() {
       <section className="content">
         <div className="page-header">
           <div><h1>Attendance History</h1><p>View previously recorded attendance.</p></div>
+          <button className="btn btn-secondary" onClick={fetchHistory} disabled={loading}><RefreshCw size={16} className={loading ? "spin" : ""} /> Refresh</button>
         </div>
 
         <div className="card">
           <div className="filters">
-            <div><label>Date</label><input type="date" className="form-control" value={date} onChange={e => setDate(e.target.value)} /></div>
+            <div><label>From</label><input type="date" className="form-control" value={dateFrom} onChange={e => setDateFrom(e.target.value)} /></div>
+            <div><label>To</label><input type="date" className="form-control" value={dateTo} onChange={e => setDateTo(e.target.value)} /></div>
             <div><label>Subject</label>
-              <select className="form-control" value={subject} onChange={e => setSubject(e.target.value)}>
+              <select className="form-control" value={subjectFilter} onChange={e => setSubjectFilter(e.target.value)}>
                 <option value="">All Subjects</option>
-                <option>Data Structures</option><option>Database Management</option><option>Operating Systems</option><option>Computer Networks</option>
+                {subjects.map(s => <option key={s._id} value={s._id}>{s.name} ({s.code})</option>)}
               </select>
             </div>
-            <div className="search-box"><input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} /></div>
+            <div className="search-box"><input type="text" placeholder="Search by student or subject..." value={search} onChange={e => setSearch(e.target.value)} /></div>
           </div>
         </div>
 
         <div className="card">
           <div className="table-container">
-            <table>
-              <thead><tr><th>Date</th><th>Subject</th><th>Period</th><th>Present</th><th>Absent</th><th>Percentage</th><th>Marked By</th></tr></thead>
-              <tbody>
-                {filtered.length === 0 ? (
-                  <tr><td colSpan={7} style={{ textAlign: "center", padding: 40, color: "var(--text-muted)" }}>No records found.</td></tr>
-                ) : filtered.map((r, i) => (
-                  <tr key={i}>
-                    <td>{r.date}</td>
-                    <td><strong>{r.subject}</strong></td>
-                    <td>{r.period}</td>
-                    <td><span className="badge badge-present">{r.present}</span></td>
-                    <td><span className="badge badge-absent">{r.absent}</span></td>
-                    <td><strong>{r.percentage}%</strong></td>
-                    <td>{r.markedBy}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {loading ? (
+              <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>Loading history...</div>
+            ) : error ? (
+              <div style={{ padding: 40, textAlign: "center" }}>
+                <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>
+                <button className="btn btn-primary" onClick={fetchHistory}><RefreshCw size={16} /> Retry</button>
+              </div>
+            ) : (
+              <table>
+                <thead><tr><th>Date</th><th>Subject</th><th>Student</th><th>Status</th><th>Marked By</th><th>Note</th></tr></thead>
+                <tbody>
+                  {filtered.length === 0 ? (
+                    <tr><td colSpan={6} style={{ textAlign: "center", padding: 40, color: "var(--text-muted)" }}>No records found.</td></tr>
+                  ) : filtered.map(r => (
+                    <tr key={r._id}>
+                      <td>{new Date(r.date).toLocaleDateString("en-IN")}</td>
+                      <td><strong>{r.subject?.name || "—"}</strong><br /><small style={{ color: "var(--text-muted)" }}>{r.subject?.code || ""}</small></td>
+                      <td>{r.student?.name || "—"}<br /><small style={{ color: "var(--text-muted)" }}>{r.student?.rollNumber || ""}</small></td>
+                      <td>
+                        <span className={`badge ${r.status === "PRESENT" ? "badge-present" : r.status === "LATE" ? "badge-warning" : "badge-absent"}`}>
+                          {r.status}
+                        </span>
+                      </td>
+                      <td>{r.markedBy?.name || "—"}</td>
+                      <td>{r.note || "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </section>

@@ -25,6 +25,11 @@ interface TimetableEntry {
   type: string;
 }
 
+interface DashboardStats {
+  students: number;
+  subjects: number;
+}
+
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const periodLabels = ["1\n9:30", "2\n10:30", "3\n11:30", "4\n12:30", "5\n13:30", "6\n14:30", "7\n15:30", "8\n16:30"];
 
@@ -59,20 +64,36 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<"dashboard" | "users" | "timetable">("dashboard");
   const [selectedSection, setSelectedSection] = useState("CSE-III-E");
   const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setLoading(true);
-    setError("");
-    fetch(`/api/timetable?section=${selectedSection}`)
-      .then(r => r.json())
-      .then(d => {
-        if (d.success) setTimetable(d.data);
-        else setError(d.error || "Failed to load timetable");
+    const fetchData = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const [ttRes, usersRes, statsRes] = await Promise.all([
+          fetch(`/api/timetable?section=${selectedSection}`, { credentials: "include" }),
+          fetch("/api/users?limit=100", { credentials: "include" }),
+          fetch("/api/stats/dashboard", { credentials: "include" }),
+        ]);
+        const ttData = await ttRes.json();
+        const usersData = await usersRes.json();
+        const statsData = await statsRes.json();
+
+        if (ttData.success) setTimetable(ttData.data);
+        else setError(ttData.error || "Failed to load timetable");
+        if (usersData.success) setUsers(usersData.data.items || []);
+        if (statsData.success) setStats({ students: statsData.data.students, subjects: statsData.data.subjects });
+      } catch {
+        setError("Network error.");
+      } finally {
         setLoading(false);
-      })
-      .catch(() => { setError("Network error — could not reach the server."); setLoading(false); });
+      }
+    };
+    fetchData();
   }, [selectedSection]);
 
   const getTimetable = (day: string, period: number) =>
@@ -84,25 +105,26 @@ export default function AdminPage() {
       <section className="content">
         <div className="page-header">
           <div><h1>Admin Dashboard</h1><p>Manage users, view timetable, and oversee the system.</p></div>
+          <button className="btn btn-secondary" onClick={() => window.location.reload()} disabled={loading}><RefreshCw size={16} className={loading ? "spin" : ""} /> Refresh</button>
         </div>
 
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-icon stat-icon-blue"><Users size={20} /></div>
             <div className="stat-header">Total Users</div>
-            <div className="stat-value">3</div>
+            <div className="stat-value">{users.length || "—"}</div>
             <div className="stat-change success">Active</div>
           </div>
           <div className="stat-card">
             <div className="stat-icon stat-icon-green"><GraduationCap size={20} /></div>
             <div className="stat-header">Total Students</div>
-            <div className="stat-value">8</div>
+            <div className="stat-value">{stats?.students || "—"}</div>
             <div className="stat-change success">Enrolled</div>
           </div>
           <div className="stat-card">
             <div className="stat-icon stat-icon-orange"><BookOpen size={20} /></div>
             <div className="stat-header">Total Subjects</div>
-            <div className="stat-value">6</div>
+            <div className="stat-value">{stats?.subjects || "—"}</div>
             <div className="stat-change success">This semester</div>
           </div>
           <div className="stat-card">
@@ -123,29 +145,29 @@ export default function AdminPage() {
           <div className="card">
             <div className="card-title">User Management</div>
             <div className="table-container">
-              <table>
-                <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Admin User</strong></td>
-                    <td>admin@attendify.com</td>
-                    <td><span className="badge badge-danger">ADMIN</span></td>
-                    <td><span className="badge badge-present">Active</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Debadrita Goswami</strong></td>
-                    <td>deba@attendify.com</td>
-                    <td><span className="badge badge-primary">CR</span></td>
-                    <td><span className="badge badge-present">Active</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Aarav Sharma</strong></td>
-                    <td>stu@attendify.com</td>
-                    <td><span className="badge badge-warning">STUDENT</span></td>
-                    <td><span className="badge badge-present">Active</span></td>
-                  </tr>
-                </tbody>
-              </table>
+              {loading ? (
+                <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>Loading users...</div>
+              ) : (
+                <table>
+                  <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+                  <tbody>
+                    {users.length === 0 ? (
+                      <tr><td colSpan={4} style={{ textAlign: "center", padding: 30, color: "var(--text-muted)" }}>No users found.</td></tr>
+                    ) : users.map(u => (
+                      <tr key={u._id}>
+                        <td><strong>{u.name}</strong></td>
+                        <td>{u.email}</td>
+                        <td>
+                          <span className={`badge ${u.role === "ADMIN" ? "badge-danger" : u.role === "CR" ? "badge-primary" : "badge-warning"}`}>
+                            {u.role}
+                          </span>
+                        </td>
+                        <td>{u.createdAt ? new Date(u.createdAt).toLocaleDateString("en-IN") : "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         )}
@@ -153,7 +175,7 @@ export default function AdminPage() {
         {activeTab === "timetable" && (
           <div className="card">
             <div className="card-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
-              <span>{sections.find(s => s.key === selectedSection)?.label || selectedSection} — Class Timetable (w.e.f. 23/07/2026)</span>
+              <span>{sections.find(s => s.key === selectedSection)?.label || selectedSection} — Class Timetable</span>
               <select
                 className="form-control"
                 style={{ width: "auto", padding: "6px 10px", fontSize: 13 }}
@@ -171,36 +193,36 @@ export default function AdminPage() {
                 <button className="btn btn-primary" onClick={() => window.location.reload()}><RefreshCw size={16} /> Retry</button>
               </div>
             ) : (
-            <div className="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Day</th>
-                    {periodLabels.map((p, i) => <th key={i} style={{ whiteSpace: "pre-line", textAlign: "center", fontSize: 11 }}>{p}</th>)}
-                  </tr>
-                </thead>
-                <tbody>
-                  {days.map(day => (
-                    <tr key={day}>
-                      <td><strong>{day}</strong></td>
-                      {Array.from({ length: 8 }, (_, i) => {
-                        const entry = getTimetable(day, i + 1);
-                        if (!entry) return <td key={i} style={{ background: "rgba(255,255,255,0.02)" }}></td>;
-                        const bg = entry.type === "lab" ? "rgba(0,212,255,0.06)" : entry.type === "library" ? "rgba(0,230,118,0.06)" : entry.type === "activity" ? "rgba(255,140,66,0.06)" : "";
-                        return (
-                          <td key={i} style={{ background: bg, padding: 6, fontSize: 11, lineHeight: 1.3, verticalAlign: "top" }}>
-                            <div style={{ fontWeight: 600, color: "var(--text)" }}>{entry.subject}</div>
-                            {entry.subjectCode && <div style={{ color: "var(--primary)", fontSize: 10 }}>{entry.subjectCode}</div>}
-                            {entry.faculty && <div style={{ color: "var(--text-muted)", fontSize: 10 }}>{entry.faculty}</div>}
-                            {entry.location && <div style={{ color: "var(--success)", fontSize: 10 }}>{entry.location}</div>}
-                          </td>
-                        );
-                      })}
+              <div className="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Day</th>
+                      {periodLabels.map((p, i) => <th key={i} style={{ whiteSpace: "pre-line", textAlign: "center", fontSize: 11 }}>{p}</th>)}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {days.map(day => (
+                      <tr key={day}>
+                        <td><strong>{day}</strong></td>
+                        {Array.from({ length: 8 }, (_, i) => {
+                          const entry = getTimetable(day, i + 1);
+                          if (!entry) return <td key={i} style={{ background: "rgba(255,255,255,0.02)" }}></td>;
+                          const bg = entry.type === "lab" ? "rgba(0,212,255,0.06)" : entry.type === "library" ? "rgba(0,230,118,0.06)" : entry.type === "activity" ? "rgba(255,140,66,0.06)" : "";
+                          return (
+                            <td key={i} style={{ background: bg, padding: 6, fontSize: 11, lineHeight: 1.3, verticalAlign: "top" }}>
+                              <div style={{ fontWeight: 600, color: "var(--text)" }}>{entry.subject}</div>
+                              {entry.subjectCode && <div style={{ color: "var(--primary)", fontSize: 10 }}>{entry.subjectCode}</div>}
+                              {entry.faculty && <div style={{ color: "var(--text-muted)", fontSize: 10 }}>{entry.faculty}</div>}
+                              {entry.location && <div style={{ color: "var(--success)", fontSize: 10 }}>{entry.location}</div>}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
@@ -208,27 +230,11 @@ export default function AdminPage() {
         {activeTab === "dashboard" && (
           <>
             <div className="card">
-              <div className="card-title">Recent Activity</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--border)" }}>
-                  <span>Admin logged in</span><span style={{ color: "var(--text-muted)" }}>Just now</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--border)" }}>
-                  <span>Database seeded with timetable</span><span style={{ color: "var(--text-muted)" }}>Today</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0" }}>
-                  <span>System initialized</span><span style={{ color: "var(--text-muted)" }}>Today</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
               <div className="card-title">Quick Actions</div>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                <a href="/admin" className="btn btn-primary">Manage Users</a>
-                <a href="/cr" className="btn btn-secondary">View Attendance</a>
-                <a href="/students" className="btn btn-secondary">View Students</a>
-                <a href="/subjects" className="btn btn-secondary">View Subjects</a>
+                <a href="/students" className="btn btn-primary">Manage Students</a>
+                <a href="/subjects" className="btn btn-secondary">Manage Subjects</a>
+                <a href="/reports" className="btn btn-secondary">View Reports</a>
               </div>
             </div>
           </>

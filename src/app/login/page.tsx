@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const { setUser } = useAuth();
   const router = useRouter();
 
@@ -75,8 +76,8 @@ export default function LoginPage() {
               </div>
             </div>
             <div className="login-options">
-              <label className="checkbox"><input type="checkbox" /> Remember me</label>
-              <a href="#">Forgot password?</a>
+              <label className="checkbox"><input type="checkbox" checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} /> Remember me</label>
+              <span style={{ color: "var(--text-muted)", fontSize: 13 }}>Forgot password? Contact admin.</span>
             </div>
             <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
               {loading ? "Signing In..." : "Sign In"}

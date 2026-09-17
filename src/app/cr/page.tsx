@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
-import { Users, UserCheck, UserX, TrendingUp, RefreshCw, Clock } from "lucide-react";
+import { Users, UserCheck, UserX, TrendingUp, RefreshCw } from "lucide-react";
 
 interface TimetableEntry {
   day: string;
@@ -17,28 +17,25 @@ interface TimetableEntry {
   type: string;
 }
 
+interface Student {
+  _id: string;
+  rollNumber: string;
+  name: string;
+  email: string;
+  attendancePercentage?: number;
+}
+
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
-const students = [
-  { id: 1, roll: "AU7-007-001", name: "Aarav Sharma", email: "aarav@attendify.com", attendance: 92 },
-  { id: 2, roll: "AU7-007-002", name: "Riya Das", email: "riya@attendify.com", attendance: 88 },
-  { id: 3, roll: "AU7-007-003", name: "Aditya Roy", email: "aditya@attendify.com", attendance: 72 },
-  { id: 4, roll: "AU7-007-004", name: "Sneha Paul", email: "sneha@attendify.com", attendance: 81 },
-  { id: 5, roll: "AU7-007-005", name: "Rahul Sen", email: "rahul@attendify.com", attendance: 69 },
-  { id: 6, roll: "AU7-007-006", name: "Ananya Roy", email: "ananya@attendify.com", attendance: 95 },
-  { id: 7, roll: "AU7-007-007", name: "Soham Das", email: "soham@attendify.com", attendance: 84 },
-  { id: 8, roll: "AU7-007-008", name: "Priya Sharma", email: "priya@attendify.com", attendance: 76 },
-];
-
-const initialRecords = students.map((s, i) => ({ studentId: s.id, status: i === 2 || i === 4 ? "Absent" : "Present" }));
 
 export default function CRPage() {
   const [activeTab, setActiveTab] = useState<"today" | "attendance" | "timetable">("today");
   const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
-  const [records, setRecords] = useState(initialRecords);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [records, setRecords] = useState<Record<string, string>>({});
   const [selectedDay, setSelectedDay] = useState("Monday");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const dayName = days[new Date().getDay() - 1] || "Monday";
@@ -46,14 +43,27 @@ export default function CRPage() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/timetable?section=CSE-III-E")
-      .then(r => r.json())
-      .then(d => {
-        if (d.success) setTimetable(d.data);
-        else setError(d.error || "Failed to load timetable");
+    const fetchData = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const [ttRes, studentsRes] = await Promise.all([
+          fetch("/api/timetable?section=CSE-III-E", { credentials: "include" }),
+          fetch("/api/students?section=CSE-III-E&limit=200", { credentials: "include" }),
+        ]);
+        const ttData = await ttRes.json();
+        const studentsData = await studentsRes.json();
+
+        if (ttData.success) setTimetable(ttData.data);
+        else setError(ttData.error || "Failed to load timetable");
+        if (studentsData.success) setStudents(studentsData.data.items || []);
+      } catch {
+        setError("Network error.");
+      } finally {
         setLoading(false);
-      })
-      .catch(() => { setError("Network error — could not reach the server."); setLoading(false); });
+      }
+    };
+    fetchData();
   }, []);
 
   const todaySchedule = timetable.filter(t => t.day === selectedDay).sort((a, b) => a.period - b.period);
@@ -68,13 +78,65 @@ export default function CRPage() {
            (currentHour < eh || (currentHour === eh && currentMin < em));
   });
 
-  const present = records.filter(r => r.status === "Present").length;
-  const total = records.length;
+  const present = Object.values(records).filter(r => r === "PRESENT").length;
+  const total = students.length;
   const absent = total - present;
   const pct = total ? Math.round((present / total) * 100) : 0;
 
-  const setStatus = (id: number, status: string) => {
-    setRecords(records.map(r => r.studentId === id ? { ...r, status } : r));
+  const setStatus = (id: string, status: string) => {
+    setRecords(prev => ({ ...prev, [id]: prev[id] === status ? "" : status }));
+  };
+
+  const saveAttendance = async () => {
+    const today = new Date().toISOString().split("T")[0];
+    const subjectEntry = todaySchedule[0];
+    if (!subjectEntry) {
+      alert("No class scheduled for today. Select a subject first.");
+      return;
+    }
+    const subjectName = subjectEntry.subject;
+    let subjectId = "";
+    try {
+      const subRes = await fetch(`/api/subjects?search=${encodeURIComponent(subjectName)}&limit=1`, { credentials: "include" });
+      const subData = await subRes.json();
+      if (subData.success && subData.data.items?.length > 0) subjectId = subData.data.items[0]._id;
+    } catch {}
+
+    if (!subjectId) {
+      alert("Could not find the subject in the database. Make sure subjects are seeded.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const bulkRecords = students
+        .filter(s => records[s._id])
+        .map(s => ({ student: s._id, status: records[s._id] as "PRESENT" | "ABSENT" | "LATE" }));
+
+      if (bulkRecords.length === 0) {
+        alert("No attendance marked yet.");
+        setSaving(false);
+        return;
+      }
+
+      const res = await fetch("/api/attendance/bulk", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject: subjectId, date: today, records: bulkRecords }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("Attendance saved successfully!");
+        setRecords({});
+      } else {
+        alert(data.error || "Failed to save attendance");
+      }
+    } catch {
+      alert("Network error.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -82,7 +144,8 @@ export default function CRPage() {
       <Navbar title="CR Dashboard" />
       <section className="content">
         <div className="page-header">
-          <div><h1>CR Dashboard</h1><p>Manage attendance for B.TECH CSE III E (Section AU7-007)</p></div>
+          <div><h1>CR Dashboard</h1><p>Manage attendance for your section.</p></div>
+          <button className="btn btn-secondary" onClick={() => window.location.reload()} disabled={loading}><RefreshCw size={16} className={loading ? "spin" : ""} /> Refresh</button>
         </div>
 
         <div className="stats-grid">
@@ -95,13 +158,12 @@ export default function CRPage() {
             <div className="stat-icon stat-icon-green"><UserCheck size={20} /></div>
             <div className="stat-header">Present Today</div>
             <div className="stat-value">{present}</div>
-            <div className="stat-change success">+{present} from roll</div>
           </div>
           <div className="stat-card">
             <div className="stat-icon stat-icon-red"><UserX size={20} /></div>
             <div className="stat-header">Absent Today</div>
             <div className="stat-value">{absent}</div>
-            <div className="stat-change danger">{absent > 0 ? `${Math.round((absent/total)*100)}% absent` : "All present"}</div>
+            <div className="stat-change danger">{absent > 0 ? `${Math.round((absent / total) * 100)}% absent` : "All present"}</div>
           </div>
           <div className="stat-card">
             <div className="stat-icon stat-icon-cyan"><TrendingUp size={20} /></div>
@@ -167,43 +229,47 @@ export default function CRPage() {
           <div className="card">
             <div className="card-title">Mark Attendance — {selectedDay}</div>
             <div className="table-container">
-              <table>
-                <thead><tr><th>Roll No</th><th>Student</th><th>Attendance %</th><th>Status</th></tr></thead>
-                <tbody>
-                  {students.map(s => {
-                    const rec = records.find(r => r.studentId === s.id);
-                    return (
-                      <tr key={s.id}>
-                        <td>{s.roll}</td>
+              {loading ? (
+                <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>Loading students...</div>
+              ) : students.length === 0 ? (
+                <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>No students found for this section.</div>
+              ) : (
+                <table>
+                  <thead><tr><th>Roll No</th><th>Student</th><th>Status</th></tr></thead>
+                  <tbody>
+                    {students.map(s => (
+                      <tr key={s._id}>
+                        <td>{s.rollNumber}</td>
                         <td><strong>{s.name}</strong></td>
-                        <td>{s.attendance}%</td>
                         <td>
                           <div className="attendance-buttons">
-                            <button className={`attendance-btn present ${rec?.status === "Present" ? "selected" : ""}`} onClick={() => setStatus(s.id, "Present")}>Present</button>
-                            <button className={`attendance-btn absent ${rec?.status === "Absent" ? "selected" : ""}`} onClick={() => setStatus(s.id, "Absent")}>Absent</button>
+                            <button className={`attendance-btn present ${records[s._id] === "PRESENT" ? "selected" : ""}`} onClick={() => setStatus(s._id, "PRESENT")}>Present</button>
+                            <button className={`attendance-btn absent ${records[s._id] === "ABSENT" ? "selected" : ""}`} onClick={() => setStatus(s._id, "ABSENT")}>Absent</button>
                           </div>
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
             <div style={{ marginTop: 16, display: "flex", gap: 12, alignItems: "center" }}>
               <div className="stats-grid" style={{ flex: 1, marginBottom: 0 }}>
                 <div className="stat-card"><div className="stat-header">Total</div><div className="stat-value">{total}</div></div>
+                <div className="stat-card"><div className="stat-header">Marked</div><div className="stat-value">{Object.keys(records).length}</div></div>
                 <div className="stat-card"><div className="stat-header">Present</div><div className="stat-value">{present}</div></div>
-                <div className="stat-card"><div className="stat-header">Absent</div><div className="stat-value">{absent}</div></div>
-                <div className="stat-card"><div className="stat-header">Percentage</div><div className="stat-value">{pct}%</div></div>
+                <div className="stat-card"><div className="stat-header">Absent</div><div className="stat-value">{total - present}</div></div>
               </div>
             </div>
-            <button className="btn btn-primary" style={{ marginTop: 16 }} onClick={() => alert("Attendance saved successfully!")}>Save Attendance</button>
+            <button className="btn btn-primary" style={{ marginTop: 16 }} disabled={saving || Object.keys(records).length === 0} onClick={saveAttendance}>
+              {saving ? "Saving..." : "Save Attendance"}
+            </button>
           </div>
         )}
 
         {activeTab === "timetable" && (
           <div className="card">
-            <div className="card-title">B.TECH CSE III E — Full Timetable</div>
+            <div className="card-title">Full Timetable</div>
             {loading ? (
               <p style={{ color: "var(--text-muted)", padding: 20 }}>Loading timetable...</p>
             ) : error ? (
@@ -212,38 +278,38 @@ export default function CRPage() {
                 <button className="btn btn-primary" onClick={() => window.location.reload()}><RefreshCw size={16} /> Retry</button>
               </div>
             ) : (
-            <div className="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Day</th>
-                    {["1\n9:30", "2\n10:30", "3\n11:30", "4\n12:30", "5\n13:30", "6\n14:30", "7\n15:30", "8\n16:30"].map((p, i) => (
-                      <th key={i} style={{ whiteSpace: "pre-line", textAlign: "center", fontSize: 11 }}>{p}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {days.map(day => (
-                    <tr key={day}>
-                      <td><strong>{day}</strong></td>
-                      {Array.from({ length: 8 }, (_, i) => {
-                        const entry = timetable.find(t => t.day === day && t.period === i + 1);
-                        if (!entry) return <td key={i} style={{ background: "rgba(255,255,255,0.02)" }}></td>;
-                        const bg = entry.type === "lab" ? "rgba(0,212,255,0.06)" : entry.type === "library" ? "rgba(0,230,118,0.06)" : entry.type === "activity" ? "rgba(255,140,66,0.06)" : "";
-                        return (
-                          <td key={i} style={{ background: bg, padding: 6, fontSize: 11, lineHeight: 1.3, verticalAlign: "top" }}>
-                            <div style={{ fontWeight: 600, color: "var(--text)" }}>{entry.subject}</div>
-                            {entry.subjectCode && <div style={{ color: "var(--primary)", fontSize: 10 }}>{entry.subjectCode}</div>}
-                            {entry.faculty && <div style={{ color: "var(--text-muted)", fontSize: 10 }}>{entry.faculty}</div>}
-                            {entry.location && <div style={{ color: "var(--success)", fontSize: 10 }}>{entry.location}</div>}
-                          </td>
-                        );
-                      })}
+              <div className="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Day</th>
+                      {["1\n9:30", "2\n10:30", "3\n11:30", "4\n12:30", "5\n13:30", "6\n14:30", "7\n15:30", "8\n16:30"].map((p, i) => (
+                        <th key={i} style={{ whiteSpace: "pre-line", textAlign: "center", fontSize: 11 }}>{p}</th>
+                      ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {days.map(day => (
+                      <tr key={day}>
+                        <td><strong>{day}</strong></td>
+                        {Array.from({ length: 8 }, (_, i) => {
+                          const entry = timetable.find(t => t.day === day && t.period === i + 1);
+                          if (!entry) return <td key={i} style={{ background: "rgba(255,255,255,0.02)" }}></td>;
+                          const bg = entry.type === "lab" ? "rgba(0,212,255,0.06)" : entry.type === "library" ? "rgba(0,230,118,0.06)" : entry.type === "activity" ? "rgba(255,140,66,0.06)" : "";
+                          return (
+                            <td key={i} style={{ background: bg, padding: 6, fontSize: 11, lineHeight: 1.3, verticalAlign: "top" }}>
+                              <div style={{ fontWeight: 600, color: "var(--text)" }}>{entry.subject}</div>
+                              {entry.subjectCode && <div style={{ color: "var(--primary)", fontSize: 10 }}>{entry.subjectCode}</div>}
+                              {entry.faculty && <div style={{ color: "var(--text-muted)", fontSize: 10 }}>{entry.faculty}</div>}
+                              {entry.location && <div style={{ color: "var(--success)", fontSize: 10 }}>{entry.location}</div>}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
