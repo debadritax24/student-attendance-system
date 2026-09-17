@@ -55,4 +55,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   return useContext(AuthContext);
-}                                                                                                                                                                    2h 59m 24s
+}
+
