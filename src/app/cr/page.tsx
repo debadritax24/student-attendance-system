@@ -32,15 +32,13 @@ export default function CRPage() {
   const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [records, setRecords] = useState<Record<string, string>>({});
-  const [selectedDay, setSelectedDay] = useState("Monday");
+  const [selectedDay, setSelectedDay] = useState(() => {
+    const dayName = days[new Date().getDay() - 1] || "Monday";
+    return dayName;
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    const dayName = days[new Date().getDay() - 1] || "Monday";
-    setSelectedDay(dayName);
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,7 +98,7 @@ export default function CRPage() {
       const subRes = await fetch(`/api/subjects?search=${encodeURIComponent(subjectName)}&limit=1`, { credentials: "include" });
       const subData = await subRes.json();
       if (subData.success && subData.data.items?.length > 0) subjectId = subData.data.items[0]._id;
-    } catch {}
+    } catch { /* subject lookup is best-effort */ }
 
     if (!subjectId) {
       alert("Could not find the subject in the database. Make sure subjects are seeded.");

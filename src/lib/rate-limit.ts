@@ -6,6 +6,22 @@ interface RateLimitResult {
   resetMs: number;
 }
 
+const fallbackResults = new Map<string, { count: number; resetMs: number }>();
+
+function inMemoryRateLimit(key: string, maxRequests: number, windowMs: number): RateLimitResult {
+  const now = Date.now();
+  const entry = fallbackResults.get(key);
+  if (!entry || now > entry.resetMs) {
+    fallbackResults.set(key, { count: 1, resetMs: now + windowMs });
+    return { allowed: true, remaining: maxRequests - 1, resetMs: now + windowMs };
+  }
+  entry.count++;
+  if (entry.count > maxRequests) {
+    return { allowed: false, remaining: 0, resetMs: entry.resetMs };
+  }
+  return { allowed: true, remaining: maxRequests - entry.count, resetMs: entry.resetMs };
+}
+
 export async function rateLimit(
   key: string,
   maxRequests: number = 5,
@@ -15,6 +31,10 @@ export async function rateLimit(
   const now = Date.now();
   const windowMs = windowSeconds * 1000;
   const resetMs = now + windowMs;
+
+  if (!redis) {
+    return inMemoryRateLimit(key, maxRequests, windowMs);
+  }
 
   const luaScript = `
     local key = KEYS[1]
@@ -50,6 +70,6 @@ export async function rateLimit(
       resetMs: result[2] > 0 ? now + result[2] : resetMs,
     };
   } catch {
-    return { allowed: true, remaining: maxRequests, resetMs };
+    return inMemoryRateLimit(key, maxRequests, windowMs);
   }
 }

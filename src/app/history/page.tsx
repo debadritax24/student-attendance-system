@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
-import { Clock, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
 interface AttendanceRecord {
   _id: string;

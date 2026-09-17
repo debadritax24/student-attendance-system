@@ -4,7 +4,7 @@ import { useState } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
-import { CheckCheck, Search } from "lucide-react";
+import { CheckCheck } from "lucide-react";
 
 const students = [
   { id: 1, roll: "AU001", name: "Aarav Sharma", attendance: 92 },

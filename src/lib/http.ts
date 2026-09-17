@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import logger from "./logger";
 
 const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001";
 
@@ -25,6 +26,6 @@ export function handleError(e: unknown) {
     const field = Object.keys((e as any).keyPattern || {})[0] || "resource";
     return error(`Duplicate ${field}: this value already exists`, 409);
   }
-  console.error(e);
+  logger.error({ err: e }, "Unhandled API error");
   return error("Internal server error", 500);
 }
