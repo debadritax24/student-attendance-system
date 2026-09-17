@@ -11,7 +11,7 @@ const timetableSchema = new Schema({
   location: { type: String, default: "" },
   type: { type: String, enum: ["lecture", "lab", "library", "activity", "free"], default: "lecture" },
   section: { type: String, default: "CSE-III-E" },
-  semester: { type: Number, default: 5 },
+  semester: { type: Number, default: 3 },
 }, { timestamps: true });
 
 timetableSchema.index({ day: 1, period: 1, section: 1 });

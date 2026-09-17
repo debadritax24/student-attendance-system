@@ -32,6 +32,10 @@ const studentSchema = new mongoose.Schema({
   department: String, semester: Number, section: String, active: Boolean,
 }, { timestamps: true });
 
+const subjectSchema = new mongoose.Schema({
+  code: String, name: String, department: String, semester: Number, section: String,
+}, { timestamps: true });
+
 const timetableSchema = new mongoose.Schema({
   day: String, period: Number, startTime: String, endTime: String,
   subject: String, subjectCode: String, faculty: String, location: String,
@@ -41,6 +45,7 @@ const timetableSchema = new mongoose.Schema({
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 const Student = mongoose.models.Student || mongoose.model("Student", studentSchema);
+const Subject = mongoose.models.Subject || mongoose.model("Subject", subjectSchema);
 const Timetable = mongoose.models.Timetable || mongoose.model("Timetable", timetableSchema);
 
 const periods = [
@@ -56,25 +61,25 @@ const periods = [
 
 const cseTimetable = [
   // Monday
-  { day: "Monday", period: 1, subject: "Database Management Systems", subjectCode: "CSE1108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
-  { day: "Monday", period: 2, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
+  { day: "Monday", period: 1, subject: "Database Management Systems", subjectCode: "CSE11108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
+  { day: "Monday", period: 2, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE11103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
   { day: "Monday", period: 3, subject: "Interdisciplinary Project", subjectCode: "IDP14001", faculty: "", location: "", type: "activity" },
   { day: "Monday", period: 4, subject: "Library", subjectCode: "", faculty: "", location: "Library", type: "library" },
-  { day: "Monday", period: 6, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
+  { day: "Monday", period: 6, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE11105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
   { day: "Monday", period: 7, subject: "Engineering Mathematics - III C", subjectCode: "SDS11510", faculty: "", location: "", type: "lecture" },
 
   // Tuesday
-  { day: "Tuesday", period: 1, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
+  { day: "Tuesday", period: 1, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE11103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
   { day: "Tuesday", period: 2, subject: "CLL1 G3_3 (Soft Skill-Non-NEP)", subjectCode: "CLL1 G3_3", faculty: "", location: "", type: "activity" },
-  { day: "Tuesday", period: 3, subject: "Database Management Systems", subjectCode: "CSE1108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
+  { day: "Tuesday", period: 3, subject: "Database Management Systems", subjectCode: "CSE11108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
   { day: "Tuesday", period: 4, subject: "Community Service", subjectCode: "SOC14100", faculty: "", location: "", type: "activity" },
   { day: "Tuesday", period: 6, subject: "Professional Core Lab – I Principles of Programming Language Lab", subjectCode: "CSE12106", faculty: "Dr. Arnab Sinha / Mr. Sujoy Chatterjee", location: "AU6-LAB-2102", type: "lab" },
-  { day: "Tuesday", period: 8, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "AU6-LAB-2102", type: "lab" },
+  { day: "Tuesday", period: 8, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE11105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
 
   // Wednesday
-  { day: "Wednesday", period: 1, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
+  { day: "Wednesday", period: 1, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE11104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
   { day: "Wednesday", period: 2, subject: "Interdisciplinary Project", subjectCode: "IDP14001", faculty: "", location: "", type: "activity" },
-  { day: "Wednesday", period: 3, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
+  { day: "Wednesday", period: 3, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE11104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
   { day: "Wednesday", period: 4, subject: "Engineering Mathematics - III C", subjectCode: "SDS11510", faculty: "", location: "", type: "lecture" },
   { day: "Wednesday", period: 6, subject: "Library", subjectCode: "", faculty: "", location: "Library", type: "library" },
   { day: "Wednesday", period: 7, subject: "Professional Core Lab - II Data Structures and Algorithms Lab", subjectCode: "CSE12107", faculty: "Mr. Subhra Prokash Dutta / Mr. Sujoy Chatterjee", location: "AU6-LAB-2102", type: "lab" },
@@ -82,15 +87,15 @@ const cseTimetable = [
   // Thursday
   { day: "Thursday", period: 1, subject: "Database Management Systems Lab", subjectCode: "CSE12113", faculty: "Mr. Victor Das / Ayan Mishra", location: "AU6-LAB-4001B", type: "lab" },
   { day: "Thursday", period: 2, subject: "CLL2 G3_3 (Aptitude-Non-NEP)", subjectCode: "CLL2 G3_3", faculty: "", location: "", type: "activity" },
-  { day: "Thursday", period: 3, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE1105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
+  { day: "Thursday", period: 3, subject: "Professional Core – III Switching Circuits and Logic Design", subjectCode: "CSE11105", faculty: "Dr. Shukla Banik", location: "", type: "lecture" },
   { day: "Thursday", period: 6, subject: "Engineering Mathematics - III C", subjectCode: "SDS11510", faculty: "", location: "", type: "lecture" },
 
   // Friday
   { day: "Friday", period: 1, subject: "Engineering Mathematics - III C", subjectCode: "SDS11510", faculty: "", location: "", type: "lecture" },
-  { day: "Friday", period: 2, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE1103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
+  { day: "Friday", period: 2, subject: "Professional Core – I Principles of Programming Language", subjectCode: "CSE11103", faculty: "Dr. Arnab Sinha", location: "", type: "lecture" },
   { day: "Friday", period: 3, subject: "Interdisciplinary Project", subjectCode: "IDP14001", faculty: "", location: "", type: "activity" },
-  { day: "Friday", period: 4, subject: "Database Management Systems", subjectCode: "CSE1108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
-  { day: "Friday", period: 6, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE1104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
+  { day: "Friday", period: 4, subject: "Database Management Systems", subjectCode: "CSE11108", faculty: "Mr. Victor Das", location: "", type: "lecture" },
+  { day: "Friday", period: 6, subject: "Professional Core – II Data Structures and Algorithms", subjectCode: "CSE11104", faculty: "Mr. Subhra Prokash Dutta", location: "", type: "lecture" },
 ];
 
 const sections = [
@@ -121,67 +126,82 @@ const sections = [
 ];
 
 const students = [
-  { rollNumber: "UG/04/BT/CSE/2025/281", enrollmentNumber: "AU/2025/002974", name: "Ayan Mondal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/282", enrollmentNumber: "AU/2025/002981", name: "Monalisa Panda", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/286", enrollmentNumber: "AU/2025/002996", name: "Ankita Jana", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/287", enrollmentNumber: "AU/2025/003017", name: "Nilanjana Sarkar", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/289", enrollmentNumber: "AU/2025/003022", name: "Sunandan Ghosh", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/290", enrollmentNumber: "AU/2025/003025", name: "Sk Sahil Ahmed", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/291", enrollmentNumber: "AU/2025/003045", name: "Samayan Roy", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/292", enrollmentNumber: "AU/2025/003049", name: "Tamanna Bisiwas", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/293", enrollmentNumber: "AU/2025/003057", name: "Dipon Das", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/294", enrollmentNumber: "AU/2025/003103", name: "Subhadeep dutta", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/295", enrollmentNumber: "AU/2025/003109", name: "Saptartimi Saha", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/296", enrollmentNumber: "AU/2025/003111", name: "Priyangshu Paul", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/297", enrollmentNumber: "AU/2025/003117", name: "Aryan Pandey", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/298", enrollmentNumber: "AU/2025/003209", name: "Kishaloy Mondal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/300", enrollmentNumber: "AU/2025/003248", name: "Reyansh Dalui", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/301", enrollmentNumber: "AU/2025/003277", name: "Srisyaditya Bose", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/302", enrollmentNumber: "AU/2025/003286", name: "Mohit Saha", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/303", enrollmentNumber: "AU/2025/003287", name: "Aaditya Mallick", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/304", enrollmentNumber: "AU/2025/003300", name: "Talha Talwekar", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/306", enrollmentNumber: "AU/2025/003378", name: "Neha Adhikari", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/307", enrollmentNumber: "AU/2025/003380", name: "Nilanilina Dutta", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/308", enrollmentNumber: "AU/2025/003381", name: "Sukriti Biswas", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/309", enrollmentNumber: "AU/2025/003390", name: "Satyam Kumar", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/310", enrollmentNumber: "AU/2025/003488", name: "Ashik Mondal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/312", enrollmentNumber: "AU/2025/003490", name: "Partho Majumder", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/313", enrollmentNumber: "AU/2025/003511", name: "Subhajit Daripa", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/314", enrollmentNumber: "AU/2025/003521", name: "Shaunk Shah", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/315", enrollmentNumber: "AU/2025/003522", name: "Thangam Borish Meitei", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/316", enrollmentNumber: "AU/2025/003567", name: "Sourangshu Mallick", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/317", enrollmentNumber: "AU/2025/003570", name: "Shubynyuti Dhar", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/318", enrollmentNumber: "AU/2025/003586", name: "Rajbir Saha", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/319", enrollmentNumber: "AU/2025/003588", name: "Abdul Matin", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/320", enrollmentNumber: "AU/2025/003593", name: "Anshankhan Mandal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/321", enrollmentNumber: "AU/2025/003595", name: "Ankit Yadav", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/322", enrollmentNumber: "AU/2025/003596", name: "Harsh Ray", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/323", enrollmentNumber: "AU/2025/003639", name: "Surajit Dey", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/324", enrollmentNumber: "AU/2025/003640", name: "Kusumita Mondal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/325", enrollmentNumber: "AU/2025/003641", name: "Ranit Samui", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/326", enrollmentNumber: "AU/2025/003647", name: "Shilpa Sahoo", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/327", enrollmentNumber: "AU/2025/003650", name: "Shirshendu Ghosh", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/328", enrollmentNumber: "AU/2025/003713", name: "Tuhin Majumdar", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/330", enrollmentNumber: "AU/2025/003731", name: "Rimi Saha", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/331", enrollmentNumber: "AU/2025/003735", name: "Shreyasree Ghosh Mondal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/332", enrollmentNumber: "AU/2025/003739", name: "Pramit Mukherjee", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/333", enrollmentNumber: "AU/2025/003743", name: "Ankhi Biswas", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/334", enrollmentNumber: "AU/2025/003745", name: "Sayak Biswas", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/335", enrollmentNumber: "AU/2025/003746", name: "Aditi Palit", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/336", enrollmentNumber: "AU/2025/003749", name: "Ramanda Dinda", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/337", enrollmentNumber: "AU/2025/003751", name: "Banhita Chakraborty", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/338", enrollmentNumber: "AU/2025/003814", name: "Soumidip Chakraborty", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/339", enrollmentNumber: "AU/2025/003844", name: "Debadrita Goswami", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/340", enrollmentNumber: "AU/2025/003847", name: "Ayush Biswas", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/341", enrollmentNumber: "AU/2025/003851", name: "Mangaldeep Mondal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/342", enrollmentNumber: "AU/2025/003914", name: "Sattvik Tarafadar", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/343", enrollmentNumber: "AU/2025/003161", name: "Sovik Sahoo", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/345", enrollmentNumber: "AU/2025/002064", name: "Sourajitr Chakraborty", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/346", enrollmentNumber: "AU/2025/001911", name: "Saptarshi Mandal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/347", enrollmentNumber: "AU/2025/002384", name: "Suchana Pal", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/348", enrollmentNumber: "AU/2025/003917", name: "Abhilbika Sarkar", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/349", enrollmentNumber: "AU/2025/003932", name: "Namrata Chauhan", department: "CSE", semester: 3, section: "E", active: true },
-  { rollNumber: "UG/04/BT/CSE/2025/350", enrollmentNumber: "AU/2025/004034", name: "Saswata Das", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/281", enrollmentNumber: "AU/2025/002974", name: "Ayan Mondal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/282", enrollmentNumber: "AU/2025/002981", name: "Monalisa Panda", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/286", enrollmentNumber: "AU/2025/002996", name: "Ankita Jana", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/287", enrollmentNumber: "AU/2025/003017", name: "Nilanjana Sarkar", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/289", enrollmentNumber: "AU/2025/003022", name: "Sunandan Ghosh", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/290", enrollmentNumber: "AU/2025/003025", name: "Sk Sahil Ahmed", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/291", enrollmentNumber: "AU/2025/003045", name: "Samayan Roy", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/292", enrollmentNumber: "AU/2025/003049", name: "Tamanna Bisiwas", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/293", enrollmentNumber: "AU/2025/003057", name: "Dipon Das", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/294", enrollmentNumber: "AU/2025/003103", name: "Subhadeep dutta", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/295", enrollmentNumber: "AU/2025/003109", name: "Saptartimi Saha", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/296", enrollmentNumber: "AU/2025/003111", name: "Priyangshu Paul", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/297", enrollmentNumber: "AU/2025/003117", name: "Aryan Pandey", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/298", enrollmentNumber: "AU/2025/003209", name: "Kishaloy Mondal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/300", enrollmentNumber: "AU/2025/003248", name: "Reyansh Dalui", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/301", enrollmentNumber: "AU/2025/003277", name: "Srisyaditya Bose", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/302", enrollmentNumber: "AU/2025/003286", name: "Mohit Saha", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/303", enrollmentNumber: "AU/2025/003287", name: "Aaditya Mallick", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/304", enrollmentNumber: "AU/2025/003300", name: "Talha Talwekar", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/306", enrollmentNumber: "AU/2025/003378", name: "Neha Adhikari", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/307", enrollmentNumber: "AU/2025/003380", name: "Nilanilina Dutta", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/308", enrollmentNumber: "AU/2025/003381", name: "Sukriti Biswas", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/309", enrollmentNumber: "AU/2025/003390", name: "Satyam Kumar", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/310", enrollmentNumber: "AU/2025/003488", name: "Ashik Mondal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/312", enrollmentNumber: "AU/2025/003490", name: "Partho Majumder", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/313", enrollmentNumber: "AU/2025/003511", name: "Subhajit Daripa", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/314", enrollmentNumber: "AU/2025/003521", name: "Shaunk Shah", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/315", enrollmentNumber: "AU/2025/003522", name: "Thangam Borish Meitei", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/316", enrollmentNumber: "AU/2025/003567", name: "Sourangshu Mallick", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/317", enrollmentNumber: "AU/2025/003570", name: "Shubynyuti Dhar", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/318", enrollmentNumber: "AU/2025/003586", name: "Rajbir Saha", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/319", enrollmentNumber: "AU/2025/003588", name: "Abdul Matin", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/320", enrollmentNumber: "AU/2025/003593", name: "Anshankhan Mandal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/321", enrollmentNumber: "AU/2025/003595", name: "Ankit Yadav", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/322", enrollmentNumber: "AU/2025/003596", name: "Harsh Ray", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/323", enrollmentNumber: "AU/2025/003639", name: "Surajit Dey", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/324", enrollmentNumber: "AU/2025/003640", name: "Kusumita Mondal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/325", enrollmentNumber: "AU/2025/003641", name: "Ranit Samui", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/326", enrollmentNumber: "AU/2025/003647", name: "Shilpa Sahoo", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/327", enrollmentNumber: "AU/2025/003650", name: "Shirshendu Ghosh", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/328", enrollmentNumber: "AU/2025/003713", name: "Tuhin Majumdar", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/330", enrollmentNumber: "AU/2025/003731", name: "Rimi Saha", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/331", enrollmentNumber: "AU/2025/003735", name: "Shreyasree Ghosh Mondal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/332", enrollmentNumber: "AU/2025/003739", name: "Pramit Mukherjee", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/333", enrollmentNumber: "AU/2025/003743", name: "Ankhi Biswas", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/334", enrollmentNumber: "AU/2025/003745", name: "Sayak Biswas", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/335", enrollmentNumber: "AU/2025/003746", name: "Aditi Palit", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/336", enrollmentNumber: "AU/2025/003749", name: "Ramanda Dinda", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/337", enrollmentNumber: "AU/2025/003751", name: "Banhita Chakraborty", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/338", enrollmentNumber: "AU/2025/003814", name: "Soumidip Chakraborty", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/339", enrollmentNumber: "AU/2025/003844", name: "Debadrita Goswami", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/340", enrollmentNumber: "AU/2025/003847", name: "Ayush Biswas", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/341", enrollmentNumber: "AU/2025/003851", name: "Mangaldeep Mondal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/342", enrollmentNumber: "AU/2025/003914", name: "Sattvik Tarafadar", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/343", enrollmentNumber: "AU/2025/003161", name: "Sovik Sahoo", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/345", enrollmentNumber: "AU/2025/002064", name: "Sourajitr Chakraborty", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/346", enrollmentNumber: "AU/2025/001911", name: "Saptarshi Mandal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/347", enrollmentNumber: "AU/2025/002384", name: "Suchana Pal", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/348", enrollmentNumber: "AU/2025/003917", name: "Abhilbika Sarkar", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/349", enrollmentNumber: "AU/2025/003932", name: "Namrata Chauhan", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/350", enrollmentNumber: "AU/2025/004034", name: "Saswata Das", department: "CSE", semester: 3, section: "CSE-III-E", active: true },
+];
+
+const subjects = [
+  { code: "CSE11103", name: "Professional Core – I Principles of Programming Language", department: "CSE", semester: 3, section: "E" },
+  { code: "CSE11104", name: "Professional Core – II Data Structures and Algorithms", department: "CSE", semester: 3, section: "E" },
+  { code: "CSE11105", name: "Professional Core – III Switching Circuits and Logic Design", department: "CSE", semester: 3, section: "E" },
+  { code: "CSE11108", name: "Database Management Systems", department: "CSE", semester: 3, section: "E" },
+  { code: "SDS11510", name: "Engineering Mathematics - III C", department: "CSE", semester: 3, section: "E" },
+  { code: "IDP14001", name: "Interdisciplinary Project", department: "CSE", semester: 3, section: "E" },
+  { code: "SOC14100", name: "Community Service", department: "CSE", semester: 3, section: "E" },
+  { code: "CLL1 G3_3", name: "CLL1 G3_3 (Soft Skill-Non-NEP)", department: "CSE", semester: 3, section: "E" },
+  { code: "CLL2 G3_3", name: "CLL2 G3_3 (Aptitude-Non-NEP)", department: "CSE", semester: 3, section: "E" },
+  { code: "CSE12106", name: "Professional Core Lab – I Principles of Programming Language Lab", department: "CSE", semester: 3, section: "E" },
+  { code: "CSE12107", name: "Professional Core Lab - II Data Structures and Algorithms Lab", department: "CSE", semester: 3, section: "E" },
+  { code: "CSE12113", name: "Database Management Systems Lab", department: "CSE", semester: 3, section: "E" },
 ];
 
 async function seed() {
@@ -192,6 +212,7 @@ async function seed() {
   // Clear existing data
   await User.deleteMany({});
   await Student.deleteMany({});
+  await Subject.deleteMany({});
   await Timetable.deleteMany({});
   console.log("Cleared existing data.");
 
@@ -227,6 +248,10 @@ async function seed() {
     await User.findByIdAndUpdate(studentUser._id, { studentId: debadrita._id });
     console.log("Linked student user to Debadrita Goswami.");
   }
+
+  // Create subjects
+  await Subject.insertMany(subjects);
+  console.log(`Created ${subjects.length} subjects.`);
 
   // Create timetable entries for all sections
   const allTimetableEntries: any[] = [];
