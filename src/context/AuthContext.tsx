@@ -55,5 +55,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   return useContext(AuthContext);
-}
-~/Documents/student attendance system main ❯ continue                                                                                                                                                                              2h 59m 24s
+}                                                                                                                                                                    2h 59m 24s
