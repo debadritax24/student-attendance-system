@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
-export function withCors(res: NextResponse, origin = process.env.FRONTEND_URL || "http://localhost:3000") {
+const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001";
+
+export function withCors(res: NextResponse, origin = allowedOrigin) {
   res.headers.set("Access-Control-Allow-Origin", origin);
   res.headers.set("Access-Control-Allow-Credentials", "true");
   res.headers.set("Access-Control-Allow-Methods", "GET,POST,PATCH,PUT,DELETE,OPTIONS");
@@ -19,6 +21,10 @@ export function handleError(e: unknown) {
   if (e instanceof ZodError) return error("Validation failed", 400, e.issues);
   if (e instanceof Error && e.name === "ValidationError") return error(e.message, 400);
   if (e instanceof Error && e.name === "CastError") return error("Invalid resource ID", 400);
+  if (e instanceof Error && "code" in e && (e as any).code === 11000) {
+    const field = Object.keys((e as any).keyPattern || {})[0] || "resource";
+    return error(`Duplicate ${field}: this value already exists`, 409);
+  }
   console.error(e);
   return error("Internal server error", 500);
 }

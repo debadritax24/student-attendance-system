@@ -6,7 +6,11 @@ import { error } from "./http";
 export type Role = "CR" | "STUDENT" | "ADMIN";
 export type Session = { userId: string; role: Role; email: string };
 
-const secret = () => new TextEncoder().encode(process.env.JWT_SECRET || "");
+const secret = () => {
+  const s = process.env.JWT_SECRET;
+  if (!s) throw new Error("JWT_SECRET environment variable is not set");
+  return new TextEncoder().encode(s);
+};
 
 export async function createToken(session: Session) {
   return new SignJWT(session).setProtectedHeader({ alg: "HS256" })
