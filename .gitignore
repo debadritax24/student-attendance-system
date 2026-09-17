@@ -1,0 +1,27 @@
+# Environment variables
+.env
+.env*
+!.env.example
+
+# Next.js
+.next
+out/
+next-env.d.ts
+
+# Dependencies
+node_modules
+
+# Testing
+coverage
+
+# Docker
+docker-compose.override.yml
+
+# Misc
+*.log
+.DS_Store
+Thumbs.db
+
+# Legacy
+server/.next
+server/node_modules

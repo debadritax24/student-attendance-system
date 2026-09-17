@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const studentSchema = new mongoose.Schema({
-  rollNumber: String, name: String, email: String,
+  rollNumber: String, enrollmentNumber: String, name: String, email: String,
   department: String, semester: Number, section: String, active: Boolean,
 }, { timestamps: true });
 
@@ -121,14 +121,67 @@ const sections = [
 ];
 
 const students = [
-  { rollNumber: "AU7-007-001", name: "Aarav Sharma", email: "aarav@attendify.com", department: "CSE", semester: 5, section: "E", active: true },
-  { rollNumber: "AU7-007-002", name: "Riya Das", email: "riya@attendify.com", department: "CSE", semester: 5, section: "E", active: true },
-  { rollNumber: "AU7-007-003", name: "Aditya Roy", email: "aditya@attendify.com", department: "CSE", semester: 5, section: "E", active: true },
-  { rollNumber: "AU7-007-004", name: "Sneha Paul", email: "sneha@attendify.com", department: "CSE", semester: 5, section: "E", active: true },
-  { rollNumber: "AU7-007-005", name: "Rahul Sen", email: "rahul@attendify.com", department: "CSE", semester: 5, section: "E", active: true },
-  { rollNumber: "AU7-007-006", name: "Ananya Roy", email: "ananya@attendify.com", department: "CSE", semester: 5, section: "E", active: true },
-  { rollNumber: "AU7-007-007", name: "Soham Das", email: "soham@attendify.com", department: "CSE", semester: 5, section: "E", active: true },
-  { rollNumber: "AU7-007-008", name: "Priya Sharma", email: "priya@attendify.com", department: "CSE", semester: 5, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/281", enrollmentNumber: "AU/2025/002974", name: "Ayan Mondal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/282", enrollmentNumber: "AU/2025/002981", name: "Monalisa Panda", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/286", enrollmentNumber: "AU/2025/002996", name: "Ankita Jana", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/287", enrollmentNumber: "AU/2025/003017", name: "Nilanjana Sarkar", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/289", enrollmentNumber: "AU/2025/003022", name: "Sunandan Ghosh", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/290", enrollmentNumber: "AU/2025/003025", name: "Sk Sahil Ahmed", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/291", enrollmentNumber: "AU/2025/003045", name: "Samayan Roy", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/292", enrollmentNumber: "AU/2025/003049", name: "Tamanna Bisiwas", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/293", enrollmentNumber: "AU/2025/003057", name: "Dipon Das", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/294", enrollmentNumber: "AU/2025/003103", name: "Subhadeep dutta", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/295", enrollmentNumber: "AU/2025/003109", name: "Saptartimi Saha", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/296", enrollmentNumber: "AU/2025/003111", name: "Priyangshu Paul", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/297", enrollmentNumber: "AU/2025/003117", name: "Aryan Pandey", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/298", enrollmentNumber: "AU/2025/003209", name: "Kishaloy Mondal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/300", enrollmentNumber: "AU/2025/003248", name: "Reyansh Dalui", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/301", enrollmentNumber: "AU/2025/003277", name: "Srisyaditya Bose", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/302", enrollmentNumber: "AU/2025/003286", name: "Mohit Saha", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/303", enrollmentNumber: "AU/2025/003287", name: "Aaditya Mallick", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/304", enrollmentNumber: "AU/2025/003300", name: "Talha Talwekar", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/306", enrollmentNumber: "AU/2025/003378", name: "Neha Adhikari", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/307", enrollmentNumber: "AU/2025/003380", name: "Nilanilina Dutta", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/308", enrollmentNumber: "AU/2025/003381", name: "Sukriti Biswas", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/309", enrollmentNumber: "AU/2025/003390", name: "Satyam Kumar", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/310", enrollmentNumber: "AU/2025/003488", name: "Ashik Mondal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/312", enrollmentNumber: "AU/2025/003490", name: "Partho Majumder", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/313", enrollmentNumber: "AU/2025/003511", name: "Subhajit Daripa", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/314", enrollmentNumber: "AU/2025/003521", name: "Shaunk Shah", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/315", enrollmentNumber: "AU/2025/003522", name: "Thangam Borish Meitei", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/316", enrollmentNumber: "AU/2025/003567", name: "Sourangshu Mallick", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/317", enrollmentNumber: "AU/2025/003570", name: "Shubynyuti Dhar", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/318", enrollmentNumber: "AU/2025/003586", name: "Rajbir Saha", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/319", enrollmentNumber: "AU/2025/003588", name: "Abdul Matin", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/320", enrollmentNumber: "AU/2025/003593", name: "Anshankhan Mandal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/321", enrollmentNumber: "AU/2025/003595", name: "Ankit Yadav", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/322", enrollmentNumber: "AU/2025/003596", name: "Harsh Ray", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/323", enrollmentNumber: "AU/2025/003639", name: "Surajit Dey", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/324", enrollmentNumber: "AU/2025/003640", name: "Kusumita Mondal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/325", enrollmentNumber: "AU/2025/003641", name: "Ranit Samui", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/326", enrollmentNumber: "AU/2025/003647", name: "Shilpa Sahoo", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/327", enrollmentNumber: "AU/2025/003650", name: "Shirshendu Ghosh", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/328", enrollmentNumber: "AU/2025/003713", name: "Tuhin Majumdar", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/330", enrollmentNumber: "AU/2025/003731", name: "Rimi Saha", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/331", enrollmentNumber: "AU/2025/003735", name: "Shreyasree Ghosh Mondal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/332", enrollmentNumber: "AU/2025/003739", name: "Pramit Mukherjee", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/333", enrollmentNumber: "AU/2025/003743", name: "Ankhi Biswas", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/334", enrollmentNumber: "AU/2025/003745", name: "Sayak Biswas", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/335", enrollmentNumber: "AU/2025/003746", name: "Aditi Palit", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/336", enrollmentNumber: "AU/2025/003749", name: "Ramanda Dinda", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/337", enrollmentNumber: "AU/2025/003751", name: "Banhita Chakraborty", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/338", enrollmentNumber: "AU/2025/003814", name: "Soumidip Chakraborty", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/339", enrollmentNumber: "AU/2025/003844", name: "Debadrita Goswami", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/340", enrollmentNumber: "AU/2025/003847", name: "Ayush Biswas", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/341", enrollmentNumber: "AU/2025/003851", name: "Mangaldeep Mondal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/342", enrollmentNumber: "AU/2025/003914", name: "Sattvik Tarafadar", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/343", enrollmentNumber: "AU/2025/003161", name: "Sovik Sahoo", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/345", enrollmentNumber: "AU/2025/002064", name: "Sourajitr Chakraborty", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/346", enrollmentNumber: "AU/2025/001911", name: "Saptarshi Mandal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/347", enrollmentNumber: "AU/2025/002384", name: "Suchana Pal", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/348", enrollmentNumber: "AU/2025/003917", name: "Abhilbika Sarkar", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/349", enrollmentNumber: "AU/2025/003932", name: "Namrata Chauhan", department: "CSE", semester: 3, section: "E", active: true },
+  { rollNumber: "UG/04/BT/CSE/2025/350", enrollmentNumber: "AU/2025/004034", name: "Saswata Das", department: "CSE", semester: 3, section: "E", active: true },
 ];
 
 async function seed() {
@@ -159,7 +212,7 @@ async function seed() {
   console.log("Created CR: deba@attendify.com / deba123");
 
   const studentUser = await User.create({
-    name: "Aarav Sharma", email: "stu@attendify.com",
+    name: "Debadrita Goswami", email: "stu@attendify.com",
     passwordHash: await hash("stu123"), role: "STUDENT",
   });
   console.log("Created student: stu@attendify.com / stu123");
@@ -168,9 +221,12 @@ async function seed() {
   const createdStudents = await Student.insertMany(students);
   console.log(`Created ${createdStudents.length} students.`);
 
-  // Link student user to student record
-  await User.findByIdAndUpdate(studentUser._id, { studentId: createdStudents[0]._id });
-  console.log("Linked student user to Aarav Sharma.");
+  // Link student user to student record (Debadrita Goswami)
+  const debadrita = createdStudents.find(s => s.name === "Debadrita Goswami");
+  if (debadrita) {
+    await User.findByIdAndUpdate(studentUser._id, { studentId: debadrita._id });
+    console.log("Linked student user to Debadrita Goswami.");
+  }
 
   // Create timetable entries for all sections
   const allTimetableEntries: any[] = [];

@@ -10,7 +10,7 @@ export default function RouteLoading() {
         gap: 12,
       }}
     >
-      <div className="spinner" style={{
+      <div style={{
         width: 20,
         height: 20,
         border: "2px solid var(--border)",

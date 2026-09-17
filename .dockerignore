@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.github
+docker-compose.yml
+Dockerfile
+.dockerignore
+*.md
+LICENSE
+.env*
+!.env.example
+coverage
+src/__tests__
+.prettierrc
+.prettierignore
+vitest.config.ts
