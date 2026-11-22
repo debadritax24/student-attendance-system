@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import logger from "./logger";
+import { isMongoConnectionError } from "./mock-data";
 
 const allowedOrigin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001";
 
@@ -26,6 +27,20 @@ export function handleError(e: unknown) {
     const field = Object.keys((e as any).keyPattern || {})[0] || "resource";
     return error(`Duplicate ${field}: this value already exists`, 409);
   }
-  logger.error({ err: e }, "Unhandled API error");
+  if (isMongoConnectionError(e)) {
+    try {
+      logger.error({ err: e }, "Database connection error");
+    } catch {
+      // eslint-disable-next-line no-console
+      console.error("Database connection error:", e);
+    }
+    return error("Database connection failed. Please verify your MongoDB server credentials and connectivity.", 503);
+  }
+  try {
+    logger.error({ err: e }, "Unhandled API error");
+  } catch {
+    // eslint-disable-next-line no-console
+    console.error("Unhandled API error:", e);
+  }
   return error("Internal server error", 500);
 }

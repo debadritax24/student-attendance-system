@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import AppShell from "@/components/AppShell";
 import Navbar from "@/components/Navbar";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Search, Calendar, BookOpen } from "lucide-react";
 
 interface AttendanceRecord {
   _id: string;
@@ -59,10 +59,16 @@ export default function HistoryPage() {
     } catch {}
   };
 
-  useEffect(() => { fetchHistory(); fetchSubjects(); }, []);
-  useEffect(() => { fetchHistory(); }, [subjectFilter, dateFrom, dateTo]);
+  useEffect(() => {
+    fetchHistory();
+    fetchSubjects();
+  }, []);
 
-  const filtered = records.filter(r => {
+  useEffect(() => {
+    fetchHistory();
+  }, [subjectFilter, dateFrom, dateTo]);
+
+  const filtered = records.filter((r) => {
     if (!search) return true;
     const q = search.toLowerCase();
     return (
@@ -76,61 +82,157 @@ export default function HistoryPage() {
   return (
     <AppShell>
       <Navbar title="Attendance History" />
-      <section className="content">
+      <div className="page-content">
         <div className="page-header">
-          <div><h1>Attendance History</h1><p>View previously recorded attendance.</p></div>
-          <button className="btn btn-secondary" onClick={fetchHistory} disabled={loading}><RefreshCw size={16} className={loading ? "spin" : ""} /> Refresh</button>
-        </div>
-
-        <div className="card">
-          <div className="filters">
-            <div><label>From</label><input type="date" className="form-control" value={dateFrom} onChange={e => setDateFrom(e.target.value)} /></div>
-            <div><label>To</label><input type="date" className="form-control" value={dateTo} onChange={e => setDateTo(e.target.value)} /></div>
-            <div><label>Subject</label>
-              <select className="form-control" value={subjectFilter} onChange={e => setSubjectFilter(e.target.value)}>
-                <option value="">All Subjects</option>
-                {subjects.map(s => <option key={s._id} value={s._id}>{s.name} ({s.code})</option>)}
-              </select>
-            </div>
-            <div className="search-box"><input type="text" placeholder="Search by student or subject..." value={search} onChange={e => setSearch(e.target.value)} /></div>
+          <div>
+            <h1 className="page-header-title">Attendance Archives</h1>
+            <p className="page-header-subtitle">
+              Inspect past attendance records, timestamps, and session markers.
+            </p>
+          </div>
+          <div className="page-header-actions">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={fetchHistory}
+              disabled={loading}
+            >
+              <RefreshCw size={15} className={loading ? "spin" : ""} />
+              <span>Refresh</span>
+            </button>
           </div>
         </div>
 
+        {/* Filter Toolbar */}
+        <div className="card" style={{ marginBottom: 20 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gap: 12,
+            }}
+          >
+            <div>
+              <label className="form-label" style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <Calendar size={13} style={{ color: "var(--accent)" }} />
+                <span>From Date</span>
+              </label>
+              <input
+                type="date"
+                className="form-input"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="form-label" style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <Calendar size={13} style={{ color: "var(--accent)" }} />
+                <span>To Date</span>
+              </label>
+              <input
+                type="date"
+                className="form-input"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="form-label" style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <BookOpen size={13} style={{ color: "var(--accent)" }} />
+                <span>Subject</span>
+              </label>
+              <select
+                className="form-select"
+                value={subjectFilter}
+                onChange={(e) => setSubjectFilter(e.target.value)}
+              >
+                <option value="">All Subjects</option>
+                {subjects.map((s) => (
+                  <option key={s._id} value={s._id}>
+                    {s.name} ({s.code})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="form-label" style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <Search size={13} style={{ color: "var(--accent)" }} />
+                <span>Search</span>
+              </label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="Student or course..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Records Table */}
         <div className="card">
           <div className="table-container">
             {loading ? (
-              <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>Loading history...</div>
-            ) : error ? (
-              <div style={{ padding: 40, textAlign: "center" }}>
-                <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>
-                <button className="btn btn-primary" onClick={fetchHistory}><RefreshCw size={16} /> Retry</button>
+              <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>
+                Loading session archives...
+              </div>
+            ) : filtered.length === 0 ? (
+              <div style={{ padding: 40, textAlign: "center", color: "var(--text-muted)" }}>
+                No attendance logs found for the selected timeframe.
               </div>
             ) : (
-              <table>
-                <thead><tr><th>Date</th><th>Subject</th><th>Student</th><th>Status</th><th>Marked By</th><th>Note</th></tr></thead>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: 120 }}>Date</th>
+                    <th>Student Name</th>
+                    <th>Roll No</th>
+                    <th>Course</th>
+                    <th>Recorded By</th>
+                    <th style={{ textAlign: "right", width: 120 }}>Status</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  {filtered.length === 0 ? (
-                    <tr><td colSpan={6} style={{ textAlign: "center", padding: 40, color: "var(--text-muted)" }}>No records found.</td></tr>
-                  ) : filtered.map(r => (
-                    <tr key={r._id}>
-                      <td>{new Date(r.date).toLocaleDateString("en-IN")}</td>
-                      <td><strong>{r.subject?.name || "—"}</strong><br /><small style={{ color: "var(--text-muted)" }}>{r.subject?.code || ""}</small></td>
-                      <td>{r.student?.name || "—"}<br /><small style={{ color: "var(--text-muted)" }}>{r.student?.rollNumber || ""}</small></td>
-                      <td>
-                        <span className={`badge ${r.status === "PRESENT" ? "badge-present" : r.status === "LATE" ? "badge-warning" : "badge-absent"}`}>
-                          {r.status}
-                        </span>
-                      </td>
-                      <td>{r.markedBy?.name || "—"}</td>
-                      <td>{r.note || "—"}</td>
-                    </tr>
-                  ))}
+                  {filtered.map((r) => {
+                    const isPresent = r.status === "PRESENT";
+                    return (
+                      <tr key={r._id}>
+                        <td style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                          {r.date ? r.date.split("T")[0] : "—"}
+                        </td>
+                        <td style={{ fontWeight: 600 }}>{r.student?.name || "—"}</td>
+                        <td>
+                          <span className="badge badge-accent">{r.student?.rollNumber || "—"}</span>
+                        </td>
+                        <td>
+                          <span style={{ fontWeight: 500 }}>{r.subject?.name || "—"}</span>
+                          {r.subject?.code && (
+                            <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginLeft: 6 }}>
+                              ({r.subject.code})
+                            </span>
+                          )}
+                        </td>
+                        <td style={{ color: "var(--text-muted)", fontSize: "0.82rem" }}>
+                          {r.markedBy?.name || "CR"}
+                        </td>
+                        <td style={{ textAlign: "right" }}>
+                          <span className={`badge ${isPresent ? "badge-present" : "badge-absent"}`}>
+                            {r.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             )}
           </div>
         </div>
-      </section>
+      </div>
     </AppShell>
   );
 }

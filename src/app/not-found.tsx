@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { Sparkles, ArrowLeft } from "lucide-react";
+
 export default function NotFound() {
   return (
     <div
@@ -9,33 +12,47 @@ export default function NotFound() {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        fontFamily: "Inter, sans-serif",
-        background: "#0a0a0f",
-        color: "#e4e4e7",
-        padding: 20,
+        background: "var(--bg-app)",
+        color: "var(--text-primary)",
+        padding: 24,
+        textAlign: "center",
       }}
     >
-      <h1 style={{ fontSize: 72, fontWeight: 800, color: "#3b82f6", marginBottom: 0 }}>404</h1>
-      <h2 style={{ fontSize: 24, marginTop: 8, marginBottom: 12 }}>Page Not Found</h2>
-      <p style={{ color: "#a1a1aa", marginBottom: 24, textAlign: "center", maxWidth: 400 }}>
-        The page you&apos;re looking for doesn&apos;t exist or has been moved.
-      </p>
-      <a
-        href="/dashboard"
+      <div
+        className="brand-mark"
+        style={{ width: 48, height: 48, marginBottom: 20 }}
+      >
+        <Sparkles size={24} strokeWidth={2.3} />
+        <div className="brand-dot" />
+      </div>
+      <h1
         style={{
-          padding: "10px 24px",
-          background: "#3b82f6",
-          color: "white",
-          border: "none",
-          borderRadius: 8,
-          cursor: "pointer",
-          fontSize: 14,
-          fontWeight: 600,
-          textDecoration: "none",
+          fontSize: "4.5rem",
+          fontWeight: 800,
+          color: "var(--accent)",
+          lineHeight: 1,
+          letterSpacing: "-0.04em",
         }}
       >
-        Go to Dashboard
-      </a>
+        404
+      </h1>
+      <h2 style={{ fontSize: "1.5rem", marginTop: 12, marginBottom: 8, fontWeight: 700 }}>
+        Page Not Found
+      </h2>
+      <p
+        style={{
+          color: "var(--text-secondary)",
+          marginBottom: 24,
+          maxWidth: 420,
+          fontSize: "0.95rem",
+        }}
+      >
+        The page you are looking for does not exist, has been removed, or is temporarily unavailable.
+      </p>
+      <Link href="/dashboard" className="btn btn-primary btn-lg">
+        <ArrowLeft size={16} />
+        <span>Return to Dashboard</span>
+      </Link>
     </div>
   );
 }

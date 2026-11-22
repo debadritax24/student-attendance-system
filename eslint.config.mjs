@@ -18,6 +18,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ["node_modules/", ".next/", "out/", "coverage/", "src/__tests__/", "next-env.d.ts", "src/scripts/"],
+    ignores: ["node_modules/", ".next/", "out/", "coverage/", "src/__tests__/", "next-env.d.ts", "src/scripts/", "scripts/"],
   }
 );
